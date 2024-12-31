@@ -24,6 +24,18 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
     """
     print(f"Feting price data for {ticker}...")
     data = yf.download(ticker, interval=interval, period=period)
+    # Flatten MultiIndex columns
+    data.columns = ['_'.join(col).strip() for col in data.columns.values]
+
+    # Rename columns
+    data.columns = ['Price Close', 'Price High', 'Price Low', 'Price Open', 'Volume']
+
+    # Reset the index to make Datetime a regular column
+    data.reset_index(inplace=True)
+
+    # Rename the "Datetime" column if needed
+    data.rename(columns={'index': 'Datetime'}, inplace=True)  # Optional if the index name isn't already 'Datetime
+
     if not data.empty:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         data.to_csv(output_path, index=False)
