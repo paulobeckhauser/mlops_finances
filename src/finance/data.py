@@ -3,7 +3,6 @@ from pathlib import Path
 import typer
 from torch.utils.data import Dataset
 
-
 class MyDataset(Dataset):
     """My custom dataset."""
 
