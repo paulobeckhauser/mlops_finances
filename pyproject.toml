@@ -14,10 +14,13 @@ readme = "README.md"
 requires-python = ">=3.11"
 dynamic = ["optional-dependencies"]
 dependencies = [
+    "cookiecutter>=2.6.0",
+    "investpy>=1.0.8",
     "matplotlib>=3.10.0",
     "scikit-learn>=1.6.0",
     "torch>=2.5.1",
     "transformers>=4.47.1",
+    "typer>=0.15.1",
     "yfinance>=0.2.51",
 ]
 
