@@ -2,6 +2,7 @@ from pathlib import Path
 import pandas as pd
 import typer
 from torch.utils.data import Dataset
+from sklearn.model_selection import train_test_split
 
 class MyDataset(Dataset):
     """My custom dataset."""
@@ -122,6 +123,56 @@ def preprocess(raw_data_path: Path, output_folder: Path) -> None:
     dataset = MyDataset(raw_data_path)
     dataset.load_data()
     dataset.preprocess(output_folder)
+
+
+
+def load_preprocessed_data(preprocessed_file: Path):
+    """
+    Load the preprocessed data and prepare it for training and evaluation.
+
+    Args:
+        preprocessed_file (Path): Path to the preprocessed CSV file.
+
+    Returns:
+        pd.DataFrame: Processed feature set X.
+        pd.Series: Target variable y.
+    """
+    print(f"Loading preprocessed data from {preprocessed_file}...")
+    merged_data = pd.read_csv(preprocessed_file)
+
+    # Drop rows with NaN values in the specified columns
+    print("Dropping rows with NaN values in X...")
+    X = merged_data[['Close_Lag1', 'Close_Lag2', 'importance_score', 'delta_forecast']].dropna()
+
+    # Align `y` with `X`'s index
+    print("Aligning target variable y with X's index...")
+    y = merged_data.loc[X.index, 'Price_Direction']
+
+    print("Data successfully loaded and processed!")
+    return X, y
+
+def get_training_data(preprocessed_file: Path, test_size: float = 0.2, random_state: int = 42):
+    """
+    Load the preprocessed data, prepare features and labels, and split into training and testing sets.
+
+    Args:
+        preprocessed_file (Path): Path to the preprocessed CSV file.
+        test_size (float): Fraction of the data to use for testing.
+        random_state (int): Random state for reproducibility.
+
+    Returns:
+        tuple: (X_train, X_test, y_train, y_test)
+    """
+
+    # Load and prepare data
+    X, y = load_preprocessed_data(preprocessed_file)
+
+    # Split into training and testing sets
+    print("Splitting data into training and testing sets...")
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+
+    print("Data successfully split!")
+    return X_train, X_test, y_train, y_test
 
 
 if __name__ == "__main__":
