@@ -37,4 +37,4 @@
 # Ensure the virtual environment is created and dependencies are synced
 uv sync
 
-uv run test.py
+uv run src/finance/main.py
