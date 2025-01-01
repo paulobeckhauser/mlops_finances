@@ -19,6 +19,7 @@ dependencies = [
     "matplotlib>=3.10.0",
     "scikit-learn>=1.6.0",
     "torch>=2.5.1",
+    "tqdm>=4.67.1",
     "transformers>=4.47.1",
     "typer>=0.15.1",
     "yfinance>=0.2.51",
