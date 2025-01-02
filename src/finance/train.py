@@ -1,6 +1,6 @@
 from pathlib import Path
-from finance.data import get_training_data
-from finance.models import get_model
+from data import get_training_data
+from models import get_model
 from tqdm import tqdm
 
 def train_model(model_name, preprocessed_file: Path, **kwargs):
