@@ -1,7 +1,7 @@
 from pathlib import Path
-from finance.data import preprocess
-from finance.fetch_data import fetch_economic_calendar, fetch_price_data
-from finance.train import train_model
+from data import preprocess
+from fetch_data import fetch_economic_calendar, fetch_price_data
+from train import train_model
 
 def main():
     # Define output paths
@@ -20,6 +20,7 @@ def main():
 
     # # Path to the preprocessed file
     preprocessed_file = Path("data/processed/processed_data.csv")
+
     # Train a Random Forest model
     train_model("random_forest", preprocessed_file)
 
