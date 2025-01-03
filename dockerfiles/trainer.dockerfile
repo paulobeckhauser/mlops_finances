@@ -8,11 +8,11 @@ RUN apt update && \
 
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
-# COPY finance/ finance/
+COPY src/finance/ src/finance/
 COPY data/ data/
 
 WORKDIR /
 RUN pip install -r requirements.txt --no-cache-dir
-RUN pip install . --no-deps --no-cache-dir
+# RUN pip install . --no-deps --no-cache-dir
 
 ENTRYPOINT ["python", "-u", "src/finance/main.py"]
