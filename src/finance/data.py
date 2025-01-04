@@ -3,6 +3,8 @@ import pandas as pd
 import typer
 from torch.utils.data import Dataset
 from sklearn.model_selection import train_test_split
+import investpy
+import yfinance as yf
 
 class MyDataset(Dataset):
     """My custom dataset."""
@@ -116,14 +118,71 @@ class MyDataset(Dataset):
         if 'merged_data' not in self.dataframes:
             raise ValueError("Data has not been preprocessed yet!")
         return self.dataframes['merged_data'].iloc[index]
+    
 
+def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
+    """Fetch raw economic data and save it to the specified path."""
+    print("Fetching raw economic calendar data...")
+    calendar_data = investpy.economic_calendar(
+        from_date=start_date,
+        to_date=end_date
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    calendar_data.to_csv(output_path, index=False)
+    #####3
+    # pd.set_option('display.max_columns', None)  # Show all columns
+    # print(calendar_data.columns)
+    # filtered_df = calendar_data[(calendar_data['zone'] == 'brazil')]
+    # print(filtered_df.head())
+    ###3
+    print(f"Data saved to {output_path}")
+
+def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', period: str = '1mo'):
+    """
+    Fetch historical price data for a given ticker and save it to the specified path.
+    
+    Parameters:
+    - ticker: str, e.g., 'USDCHF=X' for USD/CHF currency pair.
+    - interval: str, e.g., '1h', '15m'.
+    - period: str, e.g., '1mo', '5d'.
+    """
+    print(f"Feting price data for {ticker}...")
+    data = yf.download(ticker, interval=interval, period=period)
+    # Flatten MultiIndex columns
+    data.columns = ['_'.join(col).strip() for col in data.columns.values]
+
+    # Rename columns
+    data.columns = ['Price Close', 'Price High', 'Price Low', 'Price Open', 'Volume']
+
+    # Reset the index to make Datetime a regular column
+    data.reset_index(inplace=True)
+
+    # Rename the "Datetime" column if needed
+    data.rename(columns={'index': 'Datetime'}, inplace=True)  # Optional if the index name isn't already 'Datetime
+
+    if not data.empty:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        data.to_csv(output_path, index=False)
+        print(f"Price data for {ticker} saved to {output_path}")
+    else:
+        print(f"No data found for {ticker}. Please check the ticker or parameters.")
+    #####3
+    # pd.set_option('display.max_columns', None)  # Show all columns
+    # print(data.columns)
+    # print(data.shape)
+    # # print(data.info())
+    # filtered_df = data[(data['Volume'] == 0)]
+    # print(filtered_df.head())
+    # print(filtered_df.shape)
+    # unique_filtered = data['Volume'].unique()
+    # print(unique_filtered)
+    ###3
 
 def preprocess(raw_data_path: Path, output_folder: Path) -> None:
     print("Preprocessing data...")
     dataset = MyDataset(raw_data_path)
     dataset.load_data()
     dataset.preprocess(output_folder)
-
 
 
 def load_preprocessed_data(preprocessed_file: Path):
@@ -176,4 +235,11 @@ def get_training_data(preprocessed_file: Path, test_size: float = 0.2, random_st
 
 
 if __name__ == "__main__":
-    typer.run(preprocess)
+    # Define output paths
+    calendar_output_path = Path("data/raw/economic_calendar.csv")
+    usd_chf_output_path = Path("data/raw/usd_chf_prices.csv")
+
+    # Fetch data
+    # fetch_economic_calendar(calendar_output_path, '01/12/2024', '31/12/2024')
+    fetch_price_data(usd_chf_output_path, ticker='USDCHF=X', interval='1h', period='1mo')
+    # typer.run(preprocess)

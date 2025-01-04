@@ -1,6 +1,6 @@
 from pathlib import Path
-from data import preprocess
-from fetch_data import fetch_economic_calendar, fetch_price_data
+from data import preprocess, fetch_economic_calendar, fetch_price_data
+# from fetch_data import fetch_economic_calendar, fetch_price_data
 from train import train_model
 
 def main():
@@ -22,10 +22,10 @@ def main():
     preprocessed_file = Path("data/processed/processed_data.csv")
 
     # Train a Random Forest model
-    train_model("random_forest", preprocessed_file)
+    # train_model("random_forest", preprocessed_file)
 
     # Train a Logistic Regression model
-    train_model("logistic_regression", preprocessed_file)
+    # train_model("logistic_regression", preprocessed_file)
 
     # Train a Deep Learning model
     train_model("deep_learning", preprocessed_file, input_size=10, hidden_size=64, output_size=2)
