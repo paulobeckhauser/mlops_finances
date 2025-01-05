@@ -21,7 +21,7 @@ class MyDataset(Dataset):
 
     def preprocess(self, output_folder: Path) -> None:
         """Preprocess the raw data and save it to the output folder."""
-        print("Proprocessing data...")
+        # print("Proprocessing data...")
 
         # Example preprocessing: Cleaning and merging the data
         df_calendar = self.dataframes['economic_calendar']
@@ -34,7 +34,9 @@ class MyDataset(Dataset):
         # print(df_exchange.head(10))
 
         # print(df_calendar.shape)
-        df_calendar = df_calendar[(~df_calendar['actual'].isna()) & (df_calendar['currency'] == 'USD') & (df_calendar['importance'] == 'high')]
+        df_calendar = df_calendar[(~df_calendar['actual'].isna()) &
+                                     (df_calendar['currency'] == 'USD') &
+                                     (df_calendar['importance'] == 'high')].copy()
         # print(df_calendar.shape)
         # df_calendar_show = df_calendar[(df_calendar['currency'] == 'USD')]
         # print(df_calendar.head())
@@ -52,65 +54,78 @@ class MyDataset(Dataset):
         df_exchange = df_exchange.sort_values(by='timestamp')
         df_calendar = df_calendar.sort_values(by='timestamp')
 
+        
+
         df_exchange['timestamp'] = df_exchange['timestamp'].dt.tz_localize(None)
         df_calendar['timestamp'] = df_calendar['timestamp'].dt.tz_localize(None)
 
-        # print(df_exchange.head())
-        # print(df_calendar.head())
+        # df_calendar_test = df_calendar[df_calendar['event'] == 'Initial Jobless Claims']
+        # print(df_calendar_test)
+        pd.set_option('display.max_columns', None)  # Show all columns
+        print(df_exchange.head())
+        print(df_calendar.head())
         
-        # Merge the datasets based on the closest previous event timestamp
+        # # Merge the datasets based on the closest previous event timestamp
         merged_data = pd.merge_asof(
             df_exchange,          # Forex data
             df_calendar,         # Economic events data
             on='timestamp',      # Key column to merge on
             direction='backward' # Use the closest preceding event
         )
-        # Filter rows where 'event' column is not null
-        merged_data = merged_data[merged_data['event'].notnull()]
-        merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
 
-        # # Lagged Prices: Add previous price values to capture trends.
-        merged_data['Close_Lag1'] = merged_data['Price Close'].shift(1)
-        merged_data['Close_Lag2'] = merged_data['Price Close'].shift(2)
-
-        # # Price Change: Calculate the price change between consecutive rows.
-        merged_data['price_change'] = merged_data['Price Close'] - merged_data['Close_Lag1']
-
-        # # Percentage Change: Calculate the percentage change in price.
-        merged_data['price_pct_change'] = (merged_data['price_change'] / merged_data['Close_Lag1']) * 100
-
-        merged_data['actual'] = pd.to_numeric(merged_data['actual'], errors='coerce')
-        merged_data['forecast'] = pd.to_numeric(merged_data['forecast'], errors='coerce')
-        merged_data['previous'] = pd.to_numeric(merged_data['previous'], errors='coerce')
-
-        merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
-
-        # Delta Features: Compute differences between actual and forecast values:
-        merged_data['delta_forecast'] = merged_data['actual'] - merged_data['forecast']
-        merged_data['delta_previous'] = merged_data['actual'] - merged_data['previous']
-
-        # # # Impact Score: Convert categorical impact values into numerical scores:
-        # impact_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
-        # merged_data['impact_score'] = merged_data['impact'].map(impact_mapping)
+        merged_data_filter = merged_data[(merged_data['timestamp'] >= '2024-12-26 00:00:00') & (merged_data['timestamp'] < '2024-12-27 00:00:00')]
+        # print(merged_data_filter)
+        # print(merged_data_filter.shape)
+        # merget_data = pd.merge()
 
         # print(merged_data.head())
+        # print(merged_data.shape)
+        # # Filter rows where 'event' column is not null
+        # merged_data = merged_data[merged_data['event'].notnull()]
+        # merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
 
-        # Get all unique values in the 'importance' column
-        # unique_importance_values = merged_data['importance'].unique()
-        # print(f"Unique values in 'importance': {unique_importance_values}")
+        # # # Lagged Prices: Add previous price values to capture trends.
+        # merged_data['Close_Lag1'] = merged_data['Price Close'].shift(1)
+        # merged_data['Close_Lag2'] = merged_data['Price Close'].shift(2)
 
-        # Fill missing values and reassign the column
-        merged_data['importance'] = merged_data['importance'].fillna('Unknown')
+        # # # Price Change: Calculate the price change between consecutive rows.
+        # merged_data['price_change'] = merged_data['Price Close'] - merged_data['Close_Lag1']
 
-        importance_mapping = {'Low': 1, 'Medium': 2, 'High': 3, 'Unknown': 0}
-        merged_data['importance_score'] = merged_data['importance'].map(importance_mapping)
-        merged_data['Price_Direction'] = (merged_data['price_change'] > 0).astype(int)
+        # # # Percentage Change: Calculate the percentage change in price.
+        # merged_data['price_pct_change'] = (merged_data['price_change'] / merged_data['Close_Lag1']) * 100
 
-        # Save the processed data
-        output_folder.mkdir(parents=True, exist_ok=True)
-        processed_path = output_folder / "processed_data.csv"
-        merged_data.to_csv(processed_path, index=False)
-        print(f"Preprocessed data saved to {processed_path}")
+        # merged_data['actual'] = pd.to_numeric(merged_data['actual'], errors='coerce')
+        # merged_data['forecast'] = pd.to_numeric(merged_data['forecast'], errors='coerce')
+        # merged_data['previous'] = pd.to_numeric(merged_data['previous'], errors='coerce')
+
+        # merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
+
+        # # Delta Features: Compute differences between actual and forecast values:
+        # merged_data['delta_forecast'] = merged_data['actual'] - merged_data['forecast']
+        # merged_data['delta_previous'] = merged_data['actual'] - merged_data['previous']
+
+        # # # # Impact Score: Convert categorical impact values into numerical scores:
+        # # impact_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
+        # # merged_data['impact_score'] = merged_data['impact'].map(impact_mapping)
+
+        # # print(merged_data.head())
+
+        # # Get all unique values in the 'importance' column
+        # # unique_importance_values = merged_data['importance'].unique()
+        # # print(f"Unique values in 'importance': {unique_importance_values}")
+
+        # # Fill missing values and reassign the column
+        # merged_data['importance'] = merged_data['importance'].fillna('Unknown')
+
+        # importance_mapping = {'Low': 1, 'Medium': 2, 'High': 3, 'Unknown': 0}
+        # merged_data['importance_score'] = merged_data['importance'].map(importance_mapping)
+        # merged_data['Price_Direction'] = (merged_data['price_change'] > 0).astype(int)
+
+        # # Save the processed data
+        # output_folder.mkdir(parents=True, exist_ok=True)
+        # processed_path = output_folder / "processed_data.csv"
+        # merged_data.to_csv(processed_path, index=False)
+        # # print(f"Preprocessed data saved to {processed_path}")
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
@@ -127,7 +142,7 @@ def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
     """Fetch raw economic data and save it to the specified path.
         Right now, we are getting time zone GMT+01:00
     """
-    print("Fetching raw economic calendar data...")
+    # print("Fetching raw economic calendar data...")
     calendar_data = investpy.economic_calendar(
         time_zone="GMT",  # Set your desired time zone
         from_date=start_date,
@@ -142,7 +157,7 @@ def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
     # print(filtered_df.head())
     ###3
 
-    print(f"Data saved to {output_path}")
+    # print(f"Data saved to {output_path}")
 
 def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', period: str = '1mo'):
     """
@@ -155,7 +170,7 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
 
     Right now the timezone is in UTC
     """
-    print(f"Feting price data for {ticker}...")
+    # print(f"Feting price data for {ticker}...")
     data = yf.download(ticker, interval=interval, period=period)
     # Flatten MultiIndex columns
     data.columns = ['_'.join(col).strip() for col in data.columns.values]
@@ -172,7 +187,7 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
     if not data.empty:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         data.to_csv(output_path, index=False)
-        print(f"Price data for {ticker} saved to {output_path}")
+        # print(f"Price data for {ticker} saved to {output_path}")
     else:
         print(f"No data found for {ticker}. Please check the ticker or parameters.")
     #####3
@@ -188,7 +203,7 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
     ###3
 
 def preprocess(raw_data_path: Path, output_folder: Path) -> None:
-    print("Preprocessing data...")
+    # print("Preprocessing data...")
     dataset = MyDataset(raw_data_path)
     dataset.load_data()
     dataset.preprocess(output_folder)
