@@ -28,7 +28,7 @@ def main():
     # train_model("logistic_regression", preprocessed_file)
 
     # Train a Deep Learning model
-    train_model("deep_learning", preprocessed_file, input_size=10, hidden_size=64, output_size=2)
+    # train_model("deep_learning", preprocessed_file, input_size=10, hidden_size=64, output_size=2)
 
 if __name__ == "__main__":
     main()
