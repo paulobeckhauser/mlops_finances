@@ -27,24 +27,27 @@ class MyDataset(Dataset):
         df_calendar = self.dataframes['economic_calendar']
         df_exchange = self.dataframes['exchange_rates']
 
-        # # Flatten MultiIndex columns
-        # df_exchange.columns = ['_'.join(col).strip() for col in df_exchange.columns.values]
-        
-        # # Rename columns
-        # df_exchange.columns = ['Price Close', 'Price High', 'Price Low', 'Price Open', 'Volume']
-        
-        # # Reset the index to make Datetime a regular column
-        # df_exchange.reset_index(inplace=True)
-        
-        # # Rename the "Datetime" column if needed
-        # df_exchange.rename(columns={'index': 'Datetime'}, inplace=True)  # Optional if the index name isn't already 'Datetime
-        
         df_exchange['timestamp'] = pd.to_datetime(df_exchange['Datetime'])
 
-        df_calendar['time'] = df_calendar['time'].replace('All Day', '00:00')
-        df_calendar['time'] = df_calendar['time'].replace('ll DayA', '00:00')
-        df_calendar['time'] = df_calendar['time'].fillna('00:00')
+        pd.set_option('display.max_columns', None)  # Show all columns
+        
+        # print(df_exchange.head(10))
+
+        # print(df_calendar.shape)
+        df_calendar = df_calendar[(~df_calendar['actual'].isna()) & (df_calendar['currency'] == 'USD') & (df_calendar['importance'] == 'high')]
+        # print(df_calendar.shape)
+        # df_calendar_show = df_calendar[(df_calendar['currency'] == 'USD')]
+        # print(df_calendar.head())
+        # print(df_calendar_show.shape)
+        # print(df_calendar_show['event'].unique())
+
+        # 1st Decision -> 
+
+        # df_calendar['time'] = df_calendar['time'].replace('All Day', '00:00')
+        # df_calendar['time'] = df_calendar['time'].replace('ll DayA', '00:00')
+        # df_calendar['time'] = df_calendar['time'].fillna('00:00')
         df_calendar['timestamp'] = pd.to_datetime(df_calendar['date'] + ' ' + df_calendar['time'], errors='coerce', dayfirst=True)
+        # print(df_calendar.shape)
 
         df_exchange = df_exchange.sort_values(by='timestamp')
         df_calendar = df_calendar.sort_values(by='timestamp')
@@ -52,8 +55,8 @@ class MyDataset(Dataset):
         df_exchange['timestamp'] = df_exchange['timestamp'].dt.tz_localize(None)
         df_calendar['timestamp'] = df_calendar['timestamp'].dt.tz_localize(None)
 
-        print(df_exchange.head())
-        print(df_calendar.head())
+        # print(df_exchange.head())
+        # print(df_calendar.head())
         
         # Merge the datasets based on the closest previous event timestamp
         merged_data = pd.merge_asof(
@@ -121,9 +124,12 @@ class MyDataset(Dataset):
     
 
 def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
-    """Fetch raw economic data and save it to the specified path."""
+    """Fetch raw economic data and save it to the specified path.
+        Right now, we are getting time zone GMT+01:00
+    """
     print("Fetching raw economic calendar data...")
     calendar_data = investpy.economic_calendar(
+        time_zone="GMT",  # Set your desired time zone
         from_date=start_date,
         to_date=end_date
     )
@@ -135,6 +141,7 @@ def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
     # filtered_df = calendar_data[(calendar_data['zone'] == 'brazil')]
     # print(filtered_df.head())
     ###3
+
     print(f"Data saved to {output_path}")
 
 def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', period: str = '1mo'):
@@ -145,6 +152,8 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
     - ticker: str, e.g., 'USDCHF=X' for USD/CHF currency pair.
     - interval: str, e.g., '1h', '15m'.
     - period: str, e.g., '1mo', '5d'.
+
+    Right now the timezone is in UTC
     """
     print(f"Feting price data for {ticker}...")
     data = yf.download(ticker, interval=interval, period=period)
@@ -241,5 +250,5 @@ if __name__ == "__main__":
 
     # Fetch data
     # fetch_economic_calendar(calendar_output_path, '01/12/2024', '31/12/2024')
-    fetch_price_data(usd_chf_output_path, ticker='USDCHF=X', interval='1h', period='1mo')
+    # fetch_price_data(usd_chf_output_path, ticker='USDCHF=X', interval='1h', period='1mo')
     # typer.run(preprocess)
