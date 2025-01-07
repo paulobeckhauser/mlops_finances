@@ -1,10 +1,12 @@
 from pathlib import Path
+
+import investpy
 import pandas as pd
 import typer
-from torch.utils.data import Dataset
-from sklearn.model_selection import train_test_split
-import investpy
 import yfinance as yf
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset
+
 
 class MyDataset(Dataset):
     """My custom dataset."""
@@ -16,16 +18,20 @@ class MyDataset(Dataset):
     def load_data(self) -> None:
         """Load data from raw data path."""
         # Load the two datasets into memory
-        self.dataframes['economic_calendar'] = pd.read_csv(self.data_path / "economic_calendar.csv")
-        self.dataframes['exchange_rates'] = pd.read_csv(self.data_path / "usd_chf_prices.csv")
+        self.dataframes["economic_calendar"] = pd.read_csv(
+            self.data_path / "economic_calendar.csv"
+        )
+        self.dataframes["exchange_rates"] = pd.read_csv(
+            self.data_path / "usd_chf_prices.csv"
+        )
 
     def preprocess(self, output_folder: Path) -> None:
         """Preprocess the raw data and save it to the output folder."""
         # print("Proprocessing data...")
 
         # Example preprocessing: Cleaning and merging the data
-        df_calendar = self.dataframes['economic_calendar']
-        df_exchange = self.dataframes['exchange_rates']
+        df_calendar = self.dataframes["economic_calendar"]
+        df_exchange = self.dataframes["exchange_rates"]
 
         df_exchange['timestamp'] = pd.to_datetime(df_exchange['Datetime'])
 
@@ -51,8 +57,14 @@ class MyDataset(Dataset):
         df_calendar['timestamp'] = pd.to_datetime(df_calendar['date'] + ' ' + df_calendar['time'], errors='coerce', dayfirst=True)
         # print(df_calendar.shape)
 
-        df_exchange = df_exchange.sort_values(by='timestamp')
-        df_calendar = df_calendar.sort_values(by='timestamp')
+        df_calendar["time"] = df_calendar["time"].replace("All Day", "00:00")
+        df_calendar["time"] = df_calendar["time"].replace("ll DayA", "00:00")
+        df_calendar["time"] = df_calendar["time"].fillna("00:00")
+        df_calendar["timestamp"] = pd.to_datetime(
+            df_calendar["date"] + " " + df_calendar["time"],
+            errors="coerce",
+            dayfirst=True,
+        )
 
         
 
@@ -67,13 +79,13 @@ class MyDataset(Dataset):
         
         # # Merge the datasets based on the closest previous event timestamp
         merged_data = pd.merge_asof(
-            df_exchange,          # Forex data
-            df_calendar,         # Economic events data
-            on='timestamp',      # Key column to merge on
-            direction='backward' # Use the closest preceding event
+            df_exchange,  # Forex data
+            df_calendar,  # Economic events data
+            on="timestamp",  # Key column to merge on
+            direction="backward",  # Use the closest preceding event
         )
 
-        merged_data_filter = merged_data[(merged_data['timestamp'] >= '2024-12-26 00:00:00') & (merged_data['timestamp'] < '2024-12-27 00:00:00')]
+        # merged_data_filter = merged_data[(merged_data['timestamp'] >= '2024-12-26 00:00:00') & (merged_data['timestamp'] < '2024-12-27 00:00:00')]
         # print(merged_data_filter)
         # print(merged_data_filter.shape)
         # merget_data = pd.merge()
@@ -129,14 +141,13 @@ class MyDataset(Dataset):
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
-        return len(self.dataframe.get('merged_data', []))
+        return len(self.dataframe.get("merged_data", []))
 
     def __getitem__(self, index: int):
         """Return a given sample from the dataset."""
-        if 'merged_data' not in self.dataframes:
+        if "merged_data" not in self.dataframes:
             raise ValueError("Data has not been preprocessed yet!")
-        return self.dataframes['merged_data'].iloc[index]
-    
+        return self.dataframes["merged_data"].iloc[index]
 
 def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
     """Fetch raw economic data and save it to the specified path.
@@ -159,10 +170,13 @@ def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
 
     # print(f"Data saved to {output_path}")
 
-def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', period: str = '1mo'):
+
+def fetch_price_data(
+    output_path: Path, ticker: str, interval: str = "1h", period: str = "1mo"
+):
     """
     Fetch historical price data for a given ticker and save it to the specified path.
-    
+
     Parameters:
     - ticker: str, e.g., 'USDCHF=X' for USD/CHF currency pair.
     - interval: str, e.g., '1h', '15m'.
@@ -173,16 +187,18 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
     # print(f"Feting price data for {ticker}...")
     data = yf.download(ticker, interval=interval, period=period)
     # Flatten MultiIndex columns
-    data.columns = ['_'.join(col).strip() for col in data.columns.values]
+    data.columns = ["_".join(col).strip() for col in data.columns.values]
 
     # Rename columns
-    data.columns = ['Price Close', 'Price High', 'Price Low', 'Price Open', 'Volume']
+    data.columns = ["Price Close", "Price High", "Price Low", "Price Open", "Volume"]
 
     # Reset the index to make Datetime a regular column
     data.reset_index(inplace=True)
 
     # Rename the "Datetime" column if needed
-    data.rename(columns={'index': 'Datetime'}, inplace=True)  # Optional if the index name isn't already 'Datetime
+    data.rename(
+        columns={"index": "Datetime"}, inplace=True
+    )  # Optional if the index name isn't already 'Datetime
 
     if not data.empty:
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -201,6 +217,7 @@ def fetch_price_data(output_path: Path, ticker: str, interval: str = '1h', perio
     # unique_filtered = data['Volume'].unique()
     # print(unique_filtered)
     ###3
+
 
 def preprocess(raw_data_path: Path, output_folder: Path) -> None:
     # print("Preprocessing data...")
@@ -225,16 +242,21 @@ def load_preprocessed_data(preprocessed_file: Path):
 
     # Drop rows with NaN values in the specified columns
     print("Dropping rows with NaN values in X...")
-    X = merged_data[['Close_Lag1', 'Close_Lag2', 'importance_score', 'delta_forecast']].dropna()
+    X = merged_data[
+        ["Close_Lag1", "Close_Lag2", "importance_score", "delta_forecast"]
+    ].dropna()
 
     # Align `y` with `X`'s index
     print("Aligning target variable y with X's index...")
-    y = merged_data.loc[X.index, 'Price_Direction']
+    y = merged_data.loc[X.index, "Price_Direction"]
 
     print("Data successfully loaded and processed!")
     return X, y
 
-def get_training_data(preprocessed_file: Path, test_size: float = 0.2, random_state: int = 42):
+
+def get_training_data(
+    preprocessed_file: Path, test_size: float = 0.2, random_state: int = 42
+):
     """
     Load the preprocessed data, prepare features and labels, and split into training and testing sets.
 
@@ -252,7 +274,9 @@ def get_training_data(preprocessed_file: Path, test_size: float = 0.2, random_st
 
     # Split into training and testing sets
     print("Splitting data into training and testing sets...")
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=random_state
+    )
 
     print("Data successfully split!")
     return X_train, X_test, y_train, y_test

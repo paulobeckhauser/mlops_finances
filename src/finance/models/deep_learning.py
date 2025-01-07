@@ -1,5 +1,6 @@
 import torch.nn as nn
 
+
 class FeedforwardNN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(FeedforwardNN, self).__init__()
