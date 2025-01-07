@@ -1,3 +1,15 @@
+# Setup
+
+Install `conda` in your machine, then
+```
+conda install conda-devenv -c conda-forge
+```
+
+Install this project environment
+```
+conda devenv
+```
+
 # Exam template for 02476 Machine Learning Operations
 
 This is the report template for the exam. Please only remove the text formatted as with three dashes in front and behind
