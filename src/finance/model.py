@@ -14,4 +14,3 @@ class FeedforwardNN(nn.Module):
         x = self.relu(x)
         x = self.fc2(x)
         return self.softmax(x)
-    

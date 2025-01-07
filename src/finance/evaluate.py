@@ -1,4 +1,3 @@
-
 model.eval()
 with torch.no_grad():
     y_pred_test = model(X_test_tensor)
