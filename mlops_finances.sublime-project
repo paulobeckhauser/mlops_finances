@@ -1,0 +1,26 @@
+{
+    "folders":
+    [
+        {
+            "path": "./",
+            "folder_exclude_patterns": ["__pycache__"]
+        },
+        {
+            "path": "/home/felipe/miniconda3/envs/intro-py311/lib/python3.11/site-packages/torch",
+            "folder_exclude_patterns": ["__pycache__"]
+        },
+        {
+            "path": "/home/felipe/miniconda3/envs/intro-py311/lib/python3.11/site-packages/sklearn",
+            "folder_exclude_patterns": ["__pycache__"]
+        },
+        {
+            "path": "/home/felipe/miniconda3/envs/intro-py311/lib/python3.11/site-packages/scipy",
+            "folder_exclude_patterns": ["__pycache__"]
+        },
+    ],
+    "settings":
+    {
+        "rulers": [88],
+        "SublimeLinter.linters.mypy.args": ["--ignore-imports"],
+    }
+}
