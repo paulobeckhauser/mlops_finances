@@ -1,10 +1,12 @@
 from pathlib import Path
+
+import investpy
 import pandas as pd
 import typer
-from torch.utils.data import Dataset
-from sklearn.model_selection import train_test_split
-import investpy
 import yfinance as yf
+from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset
+
 
 class MyDataset(Dataset):
     """My custom dataset."""
