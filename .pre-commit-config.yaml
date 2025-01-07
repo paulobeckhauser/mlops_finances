@@ -1,10 +1,35 @@
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.6.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
     -   id: check-yaml
-    -   id: check-added-large-files
+        files: \.(c|cpp|h|hpp|py)$
+
+    -   id: end-of-file-fixer
+        files: \.(ts|html|py)$
+
+    -   id: trailing-whitespace
+        files: \.(ts|html|py)$
+
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+    -   id: remove-tabs
+        args: ["--whitespaces-count", "4"]
+        files: \.(ts|html|py)$
+
+    -   id: remove-crlf
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+    -   id: isort
+        files: '\.py$'
+        require_serial: true
+
+-   repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+    -   id: black
+        files: \.py$
+        require_serial: true
