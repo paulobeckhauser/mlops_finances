@@ -1,6 +1,7 @@
-from .random_forest import get_random_forest_model
 from .deep_learning import FeedforwardNN
 from .logistic_regression import get_logistic_regression_model
+from .random_forest import get_random_forest_model
+
 
 def get_model(model_name, **kwargs):
     """

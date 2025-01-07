@@ -1,7 +1,10 @@
 from pathlib import Path
+
+from tqdm import tqdm
+
 from data import get_training_data
 from models import get_model
-from tqdm import tqdm
+
 
 def train_model(model_name, preprocessed_file: Path, **kwargs):
     # Load training and testing data
@@ -22,8 +25,8 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
     elif model_name == "deep_learning":
         import torch
         import torch.optim as optim
-        from torch.utils.data import DataLoader, TensorDataset
         from torch.nn.functional import cross_entropy
+        from torch.utils.data import DataLoader, TensorDataset
 
         # Convert to tensors
         train_dataset = TensorDataset(torch.tensor(X_train.values, dtype=torch.float32),

@@ -1,7 +1,10 @@
 from pathlib import Path
-from data import preprocess, fetch_economic_calendar, fetch_price_data
+
+from data import fetch_economic_calendar, fetch_price_data, preprocess
+
 # from fetch_data import fetch_economic_calendar, fetch_price_data
 from train import train_model
+
 
 def main():
     # Define output paths
