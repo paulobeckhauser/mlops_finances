@@ -1,74 +1,73 @@
 from pathlib import Path
-
-from tqdm import tqdm
-
+from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import ModelCheckpoint
+from torch.utils.data import DataLoader, TensorDataset
+import torch
 from data import get_training_data
-from models import get_model
-
+from model import DeepLearningModel
 
 def train_model(model_name, preprocessed_file: Path, **kwargs):
-    # Load training and testing data
-    X_train, X_test, y_train, y_test = get_training_data(preprocessed_file)
-
-    # Dynamically set the input size for deep learning models
+    """
+    Train a machine learning model based on the specified model_name.
+    Currently supports deep learning with PyTorch Lightning.
+    """
     if model_name == "deep_learning":
-        kwargs["input_size"] = X_train.shape[
-            1
-        ]  # Set input_size to the number of features
+        # Load training and testing data
+        X_train, X_test, y_train, y_test = get_training_data(preprocessed_file)
 
-    # Get the model
-    model = get_model(model_name, **kwargs)
-
-    if model_name in ["random_forest", "logistic_regression"]:
-        # Train scikit-learn models
-        model.fit(X_train, y_train)
-        y_pred_labels = model.predict(X_test)  # Directly predict class labels
-
-    elif model_name == "deep_learning":
-        import torch
-        import torch.optim as optim
-        from torch.nn.functional import cross_entropy
-        from torch.utils.data import DataLoader, TensorDataset
-
-        # Convert to tensors
+        # Convert data to PyTorch tensors
         train_dataset = TensorDataset(
             torch.tensor(X_train.values, dtype=torch.float32),
             torch.tensor(y_train.values, dtype=torch.long),
         )
+        val_dataset = TensorDataset(
+            torch.tensor(X_test.values, dtype=torch.float32),
+            torch.tensor(y_test.values, dtype=torch.long),
+        )
+
         train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+        val_loader = DataLoader(val_dataset, batch_size=32)
 
-        # Training loop
-        optimizer = optim.Adam(model.parameters(), lr=0.001)
-        # Training loop with progress bars
-        epochs = 10
-        for epoch in tqdm(range(epochs), desc="Training Epochs"):
-            epoch_loss = 0.0
-            model.train()
-            for X_batch, y_batch in train_loader:
-                optimizer.zero_grad()
-                y_pred = model(X_batch)
-                loss = cross_entropy(y_pred, y_batch)
-                loss.backward()
-                optimizer.step()
+        # Initialize the PyTorch Lightning model
+        model = DeepLearningModel(
+            input_size=X_train.shape[1],
+            num_classes=kwargs.get("num_classes", 2),
+            lr=kwargs.get("lr", 0.001)
+        )
 
-                epoch_loss += loss.item()
-            tqdm.write(f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss:.4f}")
+        # Define callbacks (e.g., checkpointing)
+        checkpoint_callback = ModelCheckpoint(
+            monitor="val_loss",
+            dirpath="checkpoints",
+            filename="best-checkpoint",
+            save_top_k=1,
+            mode="min",
+        )
 
-        # Test deep learning model
-        model.eval()
-        with torch.no_grad():
-            y_pred = model(
-                torch.tensor(X_test.values, dtype=torch.float32)
-            )  # Raw logits
-            y_pred_labels = y_pred.argmax(
-                axis=1
-            ).numpy()  # Convert logits to class labels
+        # Initialize PyTorch Lightning Trainer
+        trainer = Trainer(
+            max_epochs=kwargs.get("epochs", 10),
+            callbacks=[checkpoint_callback],
+            log_every_n_steps=1,
+        )
 
-    # Evaluate the model
-    if y_pred_labels is not None:  # Ensure predictions exist
-        from sklearn.metrics import accuracy_score
-
-        accuracy = accuracy_score(y_test, y_pred_labels)
-        print(f"{model_name} Model Accuracy: {accuracy:.4f}")
+        # Train the model
+        trainer.fit(model, train_loader, val_loader)
     else:
-        raise RuntimeError("Model did not generate predictions.")
+        raise ValueError(f"Model {model_name} is not supported with PyTorch Lightning yet.")
+
+
+if __name__ == "__main__":
+    # Define model name and file path
+    model_name = "deep_learning"  # Options: "random_forest", "logistic_regression", "deep_learning"
+    preprocessed_file = Path("data/processed/processed_data.csv")
+
+    # Additional parameters for the model
+    model_params = {
+        "epochs": 15,  # Number of epochs for deep learning
+        "lr": 0.001,  # Learning rate for deep learning
+        "num_classes": 3,  # Number of output classes
+    }
+
+    # Train the model
+    train_model(model_name, preprocessed_file, **model_params)

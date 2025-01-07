@@ -35,14 +35,14 @@ class MyDataset(Dataset):
 
         df_exchange['timestamp'] = pd.to_datetime(df_exchange['Datetime'])
 
-        pd.set_option('display.max_columns', None)  # Show all columns
+        # pd.set_option('display.max_columns', None)  # Show all columns
         
         # print(df_exchange.head(10))
 
         # print(df_calendar.shape)
-        df_calendar = df_calendar[(~df_calendar['actual'].isna()) &
-                                     (df_calendar['currency'] == 'USD') &
-                                     (df_calendar['importance'] == 'high')].copy()
+        # df_calendar = df_calendar[(~df_calendar['actual'].isna()) &
+        #                              (df_calendar['currency'] == 'USD') &
+        #                              (df_calendar['importance'] == 'high')].copy()
         # print(df_calendar.shape)
         # df_calendar_show = df_calendar[(df_calendar['currency'] == 'USD')]
         # print(df_calendar.head())
@@ -54,7 +54,13 @@ class MyDataset(Dataset):
         # df_calendar['time'] = df_calendar['time'].replace('All Day', '00:00')
         # df_calendar['time'] = df_calendar['time'].replace('ll DayA', '00:00')
         # df_calendar['time'] = df_calendar['time'].fillna('00:00')
-        df_calendar['timestamp'] = pd.to_datetime(df_calendar['date'] + ' ' + df_calendar['time'], errors='coerce', dayfirst=True)
+        # df_calendar['timestamp'] = pd.to_datetime(df_calendar['date'] + ' ' + df_calendar['time'], errors='coerce', dayfirst=True)
+        df_calendar['timestamp'] = pd.to_datetime(
+            df_calendar['date'] + ' ' + df_calendar['time'],
+            format='%d/%m/%Y %H:%M',  # Adjust the format to match your data
+            errors='coerce',
+            dayfirst=True  # Since day is the first part of the date
+        )
         # print(df_calendar.shape)
 
         df_calendar["time"] = df_calendar["time"].replace("All Day", "00:00")
@@ -74,10 +80,26 @@ class MyDataset(Dataset):
         # df_calendar_test = df_calendar[df_calendar['event'] == 'Initial Jobless Claims']
         # print(df_calendar_test)
         pd.set_option('display.max_columns', None)  # Show all columns
-        print(df_exchange.head())
-        print(df_calendar.head())
-        
-        # # Merge the datasets based on the closest previous event timestamp
+        # print(df_exchange.head())
+        # print(df_calendar.head())
+
+        # Check for null values in the timestamp columns
+        # print("Null values in df_exchange['timestamp']:", df_exchange['timestamp'].isna().sum())
+        # print("Null values in df_calendar['timestamp']:", df_calendar['timestamp'].isna().sum())
+
+
+        # Drop rows with null timestamps
+        df_exchange = df_exchange.dropna(subset=['timestamp'])
+        df_calendar = df_calendar.dropna(subset=['timestamp'])
+
+        # Sort DataFrames by the timestamp column
+        df_exchange = df_exchange.sort_values(by='timestamp').reset_index(drop=True)
+        df_calendar = df_calendar.sort_values(by='timestamp').reset_index(drop=True)
+
+        # print("Sample of df_exchange['timestamp']:", df_exchange['timestamp'].head())
+        # print("Sample of df_calendar['timestamp']:", df_calendar['timestamp'].head())
+
+        # # # Merge the datasets based on the closest previous event timestamp
         merged_data = pd.merge_asof(
             df_exchange,  # Forex data
             df_calendar,  # Economic events data
@@ -93,51 +115,51 @@ class MyDataset(Dataset):
         # print(merged_data.head())
         # print(merged_data.shape)
         # # Filter rows where 'event' column is not null
-        # merged_data = merged_data[merged_data['event'].notnull()]
-        # merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
+        merged_data = merged_data[merged_data['event'].notnull()]
+        merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
 
-        # # # Lagged Prices: Add previous price values to capture trends.
-        # merged_data['Close_Lag1'] = merged_data['Price Close'].shift(1)
-        # merged_data['Close_Lag2'] = merged_data['Price Close'].shift(2)
+        # # # # Lagged Prices: Add previous price values to capture trends.
+        merged_data['Close_Lag1'] = merged_data['Price Close'].shift(1)
+        merged_data['Close_Lag2'] = merged_data['Price Close'].shift(2)
 
-        # # # Price Change: Calculate the price change between consecutive rows.
-        # merged_data['price_change'] = merged_data['Price Close'] - merged_data['Close_Lag1']
+        # # # # Price Change: Calculate the price change between consecutive rows.
+        merged_data['price_change'] = merged_data['Price Close'] - merged_data['Close_Lag1']
 
-        # # # Percentage Change: Calculate the percentage change in price.
-        # merged_data['price_pct_change'] = (merged_data['price_change'] / merged_data['Close_Lag1']) * 100
+        # # # # Percentage Change: Calculate the percentage change in price.
+        merged_data['price_pct_change'] = (merged_data['price_change'] / merged_data['Close_Lag1']) * 100
 
-        # merged_data['actual'] = pd.to_numeric(merged_data['actual'], errors='coerce')
-        # merged_data['forecast'] = pd.to_numeric(merged_data['forecast'], errors='coerce')
-        # merged_data['previous'] = pd.to_numeric(merged_data['previous'], errors='coerce')
+        merged_data['actual'] = pd.to_numeric(merged_data['actual'], errors='coerce')
+        merged_data['forecast'] = pd.to_numeric(merged_data['forecast'], errors='coerce')
+        merged_data['previous'] = pd.to_numeric(merged_data['previous'], errors='coerce')
 
-        # merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
+        merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
 
-        # # Delta Features: Compute differences between actual and forecast values:
-        # merged_data['delta_forecast'] = merged_data['actual'] - merged_data['forecast']
-        # merged_data['delta_previous'] = merged_data['actual'] - merged_data['previous']
+        # Delta Features: Compute differences between actual and forecast values:
+        merged_data['delta_forecast'] = merged_data['actual'] - merged_data['forecast']
+        merged_data['delta_previous'] = merged_data['actual'] - merged_data['previous']
 
-        # # # # Impact Score: Convert categorical impact values into numerical scores:
-        # # impact_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
-        # # merged_data['impact_score'] = merged_data['impact'].map(impact_mapping)
+        # # # Impact Score: Convert categorical impact values into numerical scores:
+        # impact_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
+        # merged_data['impact_score'] = merged_data['impact'].map(impact_mapping)
 
-        # # print(merged_data.head())
+        # print(merged_data.head())
 
         # # Get all unique values in the 'importance' column
         # # unique_importance_values = merged_data['importance'].unique()
         # # print(f"Unique values in 'importance': {unique_importance_values}")
 
-        # # Fill missing values and reassign the column
-        # merged_data['importance'] = merged_data['importance'].fillna('Unknown')
+        # Fill missing values and reassign the column
+        merged_data['importance'] = merged_data['importance'].fillna('Unknown')
 
-        # importance_mapping = {'Low': 1, 'Medium': 2, 'High': 3, 'Unknown': 0}
-        # merged_data['importance_score'] = merged_data['importance'].map(importance_mapping)
-        # merged_data['Price_Direction'] = (merged_data['price_change'] > 0).astype(int)
+        importance_mapping = {'Low': 1, 'Medium': 2, 'High': 3, 'Unknown': 0}
+        merged_data['importance_score'] = merged_data['importance'].map(importance_mapping)
+        merged_data['Price_Direction'] = (merged_data['price_change'] > 0).astype(int)
 
-        # # Save the processed data
-        # output_folder.mkdir(parents=True, exist_ok=True)
-        # processed_path = output_folder / "processed_data.csv"
-        # merged_data.to_csv(processed_path, index=False)
-        # # print(f"Preprocessed data saved to {processed_path}")
+        # Save the processed data
+        output_folder.mkdir(parents=True, exist_ok=True)
+        processed_path = output_folder / "processed_data.csv"
+        merged_data.to_csv(processed_path, index=False)
+        print(f"Preprocessed data saved to {processed_path}")
 
     def __len__(self) -> int:
         """Return the length of the dataset."""

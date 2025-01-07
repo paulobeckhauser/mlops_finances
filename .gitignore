@@ -187,3 +187,9 @@ test.py
 
 # sublime text
 *.sublime-workspace
+
+checkpoints/*
+lightning_logs/*
+uv.lock
+
+
