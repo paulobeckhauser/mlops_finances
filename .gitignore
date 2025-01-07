@@ -185,3 +185,5 @@ Output*
 
 test.py
 
+# sublime text
+*.sublime-workspace
