@@ -12,7 +12,9 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
 
     # Dynamically set the input size for deep learning models
     if model_name == "deep_learning":
-        kwargs["input_size"] = X_train.shape[1]  # Set input_size to the number of features
+        kwargs["input_size"] = X_train.shape[
+            1
+        ]  # Set input_size to the number of features
 
     # Get the model
     model = get_model(model_name, **kwargs)
@@ -29,8 +31,10 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
         from torch.utils.data import DataLoader, TensorDataset
 
         # Convert to tensors
-        train_dataset = TensorDataset(torch.tensor(X_train.values, dtype=torch.float32),
-                                       torch.tensor(y_train.values, dtype=torch.long))
+        train_dataset = TensorDataset(
+            torch.tensor(X_train.values, dtype=torch.float32),
+            torch.tensor(y_train.values, dtype=torch.long),
+        )
         train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 
         # Training loop
@@ -53,15 +57,18 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
         # Test deep learning model
         model.eval()
         with torch.no_grad():
-            y_pred = model(torch.tensor(X_test.values, dtype=torch.float32))  # Raw logits
-            y_pred_labels = y_pred.argmax(axis=1).numpy()  # Convert logits to class labels
+            y_pred = model(
+                torch.tensor(X_test.values, dtype=torch.float32)
+            )  # Raw logits
+            y_pred_labels = y_pred.argmax(
+                axis=1
+            ).numpy()  # Convert logits to class labels
 
     # Evaluate the model
     if y_pred_labels is not None:  # Ensure predictions exist
         from sklearn.metrics import accuracy_score
+
         accuracy = accuracy_score(y_test, y_pred_labels)
         print(f"{model_name} Model Accuracy: {accuracy:.4f}")
     else:
         raise RuntimeError("Model did not generate predictions.")
-
-
