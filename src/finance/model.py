@@ -35,25 +35,6 @@ def get_model(model_name, **kwargs):
     else:
         raise ValueError(f"Unknown model name: {model_name}")
 
-
-# class DeepLearningModel(nn.Module):
-#     """
-#     Custom deep learning model for classification.
-#     """
-#     def __init__(self, input_size, num_classes):
-#         super(DeepLearningModel, self).__init__()
-#         self.fc1 = nn.Linear(input_size, 128)  # Input to hidden layer
-#         self.fc2 = nn.Linear(128, 64)         # Hidden to hidden layer
-#         self.fc3 = nn.Linear(64, num_classes) # Hidden to output layer
-#         self.relu = nn.ReLU()
-#         self.softmax = nn.Softmax(dim=1)
-
-#     def forward(self, x):
-#         x = self.relu(self.fc1(x))
-#         x = self.relu(self.fc2(x))
-#         x = self.fc3(x)  # Logits, no activation
-#         return x
-
 class DeepLearningModel(pl.LightningModule):
     """
     PyTorch Lightning model for classification.
