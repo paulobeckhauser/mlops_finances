@@ -1,0 +1,6 @@
+epochs: 20
+lr: 0.0005
+num_classes: 3
+input_size: 10
+hidden_size: 64
+output_size: 2
