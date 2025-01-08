@@ -191,5 +191,6 @@ test.py
 checkpoints/*
 lightning_logs/*
 uv.lock
+outputs/*
 
 
