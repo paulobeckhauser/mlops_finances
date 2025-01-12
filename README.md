@@ -130,7 +130,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 1 fill here ---
+Group 92
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -141,7 +141,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 2 fill here ---
+s242479, S243418, 
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -155,7 +155,11 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 3 fill here ---
+We used the third-party framework PyTorch Forecasting in our project. This framework was instrumental in handling the time-series forecasting aspect of our work, which involved predicting the parity price of USD/CHF combined with economic calendar data.
+
+PyTorch Forecasting provided us with powerful tools such as the Temporal Fusion Transformer (TFT) model, which performs well in capturing relationships across time-varying covariates and static features. We leveraged its functionality to preprocess the dataset using the TimeSeriesDataSet class, which simplified managing encoder-decoder windows and handling covariates.
+
+The framework integration with PyTorch Lightning allowed us to streamline the training process and experiment with various hyperparameters efficiently. The ability to visualize predictions and interpret model components, such as attention weights, added significant value to our analysis and model refinement.
 
 ## Coding environment
 
@@ -175,7 +179,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 4 fill here ---
+Initially, we used Conda for managing system-level dependencies and ensuring compatibility across different platforms, particularly for libraries requiring specific configurations, such as black for formatting. But then we also created a virtual environment using .venv to isolate project-specific Python dependencies. A member of the team also used 'uv' package manager which is built in Rust, and helps to guarantee compatibility between all the libraries versions, and has great results regarding the installation time comparing to only 'pip install...'.
+
+The process would be: 1. Install python; 2. Clone the repository with 'git clone <repository-url> ; 3. Create a virtual environment with 'python -m venv .venv'; 4. Activate virtual environment with 'source .venv/bin/activate' in a linux/macOS environment; 5. Install dependencies with 'pip install -r requirements.txt'
 
 ### Question 5
 
