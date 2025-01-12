@@ -2,111 +2,7 @@
 
 This project focuses on predicting the parity price of the USD/CHF currency pair by integrating historical price data with insights from economic calendar events. The goal is to build a forecasting model that enhance prediction accuracy and provide actionable insights into market trends.
 
-## Project structure
 
-The directory structure of the project looks like this:
-```txt
-├── .github/                  # Github actions and dependabot
-│   ├── dependabot.yaml
-│   └── workflows/
-│       └── tests.yaml
-├── configs/                  # Configuration files
-├── data/                     # Data directory
-│   ├── processed
-│   └── raw
-├── dockerfiles/              # Dockerfiles
-│   ├── api.Dockerfile
-│   └── train.Dockerfile
-├── docs/                     # Documentation
-│   ├── mkdocs.yml
-│   └── source/
-│       └── index.md
-├── models/                   # Trained models
-├── notebooks/                # Jupyter notebooks
-├── reports/                  # Reports
-│   └── figures/
-├── src/                      # Source code
-│   ├── project_name/
-│   │   ├── __init__.py
-│   │   ├── api.py
-│   │   ├── data.py
-│   │   ├── evaluate.py
-│   │   ├── models.py
-│   │   ├── train.py
-│   │   └── visualize.py
-└── tests/                    # Tests
-│   ├── __init__.py
-│   ├── test_api.py
-│   ├── test_data.py
-│   └── test_model.py
-├── .gitignore
-├── .pre-commit-config.yaml
-├── LICENSE
-├── pyproject.toml            # Python project file
-├── README.md                 # Project README
-├── requirements.txt          # Project requirements
-├── requirements_dev.txt      # Development requirements
-└── tasks.py                  # Project tasks
-```
-
-
-Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
-a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
-started with Machine Learning Operations (MLOps).
-
-
-# Setup
-
-Install `conda` in your machine, then
-```
-conda install conda-devenv -c conda-forge
-```
-
-Install this project environment
-```
-conda devenv
-```
-
-# Exam template for 02476 Machine Learning Operations
-
-This is the report template for the exam. Please only remove the text formatted as with three dashes in front and behind
-like:
-
-```--- question 1 fill here ---```
-
-Where you instead should add your answers. Any other changes may have unwanted consequences when your report is
-auto-generated at the end of the course. For questions where you are asked to include images, start by adding the image
-to the `figures` subfolder (please only use `.png`, `.jpg` or `.jpeg`) and then add the following code in your answer:
-
-```markdown
-![my_image](figures/<image>.<extension>)
-```
-
-In addition to this markdown file, we also provide the `report.py` script that provides two utility functions:
-
-Running:
-
-```bash
-python report.py html
-```
-
-Will generate a `.html` page of your report. After the deadline for answering this template, we will auto-scrape
-everything in this `reports` folder and then use this utility to generate a `.html` page that will be your serve
-as your final hand-in.
-
-Running
-
-```bash
-python report.py check
-```
-
-Will check your answers in this template against the constraints listed for each question e.g. is your answer too
-short, too long, or have you included an image when asked. For both functions to work you mustn't rename anything.
-The script has two dependencies that can be installed with
-
-```bash
-pip install typer markdown
-```
 
 ## Overall project checklist
 
@@ -117,12 +13,12 @@ will check the repositories and the code to verify your answers.
 
 ### Week 1
 
-* [ ] Create a git repository (M5)
-* [ ] Make sure that all team members have write access to the GitHub repository (M5)
-* [ ] Create a dedicated environment for you project to keep track of your packages (M2)
-* [ ] Create the initial file structure using cookiecutter with an appropriate template (M6)
-* [ ] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
-* [ ] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
+* [✅] Create a git repository (M5)
+* [✅] Make sure that all team members have write access to the GitHub repository (M5)
+* [✅] Create a dedicated environment for you project to keep track of your packages (M2)
+* [✅] Create the initial file structure using cookiecutter with an appropriate template (M6)
+* [✅] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
+* [✅] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
 * [ ] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
 * [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
@@ -180,6 +76,46 @@ will check the repositories and the code to verify your answers.
 * [ ] Make sure all group members have an understanding about all parts of the project
 * [ ] Uploaded all your code to GitHub
 
+# Exam template for 02476 Machine Learning Operations
+
+This is the report template for the exam. Please only remove the text formatted as with three dashes in front and behind
+like:
+
+```--- question 1 fill here ---```
+
+Where you instead should add your answers. Any other changes may have unwanted consequences when your report is
+auto-generated at the end of the course. For questions where you are asked to include images, start by adding the image
+to the `figures` subfolder (please only use `.png`, `.jpg` or `.jpeg`) and then add the following code in your answer:
+
+```markdown
+![my_image](figures/<image>.<extension>)
+```
+
+In addition to this markdown file, we also provide the `report.py` script that provides two utility functions:
+
+Running:
+
+```bash
+python report.py html
+```
+
+Will generate a `.html` page of your report. After the deadline for answering this template, we will auto-scrape
+everything in this `reports` folder and then use this utility to generate a `.html` page that will be your serve
+as your final hand-in.
+
+Running
+
+```bash
+python report.py check
+```
+
+Will check your answers in this template against the constraints listed for each question e.g. is your answer too
+short, too long, or have you included an image when asked. For both functions to work you mustn't rename anything.
+The script has two dependencies that can be installed with
+
+```bash
+pip install typer markdown
+```
 ## Group information
 
 ### Question 1
@@ -198,7 +134,7 @@ Group 92
 >
 > Answer:
 
-s242479, S243418, 
+s242479, S243418, s244086, s225526
 
 ### Question 3
 > **A requirement to the project is that you include a third-party package not covered in the course. What framework**
@@ -649,6 +585,69 @@ The process would be: 1. Install python; 2. Clone the repository with 'git clone
 
 --- question 31 fill here ---
 
+# Setup
 
+Install `conda` in your machine, then
+```
+conda install conda-devenv -c conda-forge
+```
+
+Install this project environment
+```
+conda devenv
+```
+
+
+## Project structure
+
+The directory structure of the project looks like this:
+```txt
+├── .github/                  # Github actions and dependabot
+│   ├── dependabot.yaml
+│   └── workflows/
+│       └── tests.yaml
+├── configs/                  # Configuration files
+├── data/                     # Data directory
+│   ├── processed
+│   └── raw
+├── dockerfiles/              # Dockerfiles
+│   ├── api.Dockerfile
+│   └── train.Dockerfile
+├── docs/                     # Documentation
+│   ├── mkdocs.yml
+│   └── source/
+│       └── index.md
+├── models/                   # Trained models
+├── notebooks/                # Jupyter notebooks
+├── reports/                  # Reports
+│   └── figures/
+├── src/                      # Source code
+│   ├── project_name/
+│   │   ├── __init__.py
+│   │   ├── api.py
+│   │   ├── data.py
+│   │   ├── evaluate.py
+│   │   ├── models.py
+│   │   ├── train.py
+│   │   └── visualize.py
+└── tests/                    # Tests
+│   ├── __init__.py
+│   ├── test_api.py
+│   ├── test_data.py
+│   └── test_model.py
+├── .gitignore
+├── .pre-commit-config.yaml
+├── LICENSE
+├── pyproject.toml            # Python project file
+├── README.md                 # Project README
+├── requirements.txt          # Project requirements
+├── requirements_dev.txt      # Development requirements
+└── tasks.py                  # Project tasks
+```
+
+
+Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
+a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
+started with Machine Learning Operations (MLOps).
 
 
