@@ -21,6 +21,7 @@ dependencies = [
     "matplotlib>=3.10.0",
     "pip-chill>=1.0.3",
     "pipreqs>=0.5.0",
+    "pytorch-forecasting>=1.2.0",
     "pytorch-lightning>=2.5.0.post0",
     "scikit-learn>=1.6.0",
     "torch>=2.5.1",
