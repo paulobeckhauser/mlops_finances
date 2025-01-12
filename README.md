@@ -211,12 +211,8 @@ s242479, S243418,
 > *package to do ... and ... in our project*.
 >
 > Answer:
-
-We used the third-party framework PyTorch Forecasting in our project. This framework was instrumental in handling the time-series forecasting aspect of our work, which involved predicting the parity price of USD/CHF combined with economic calendar data.
-
-PyTorch Forecasting provided us with powerful tools such as the Temporal Fusion Transformer (TFT) model, which performs well in capturing relationships across time-varying covariates and static features. We leveraged its functionality to preprocess the dataset using the TimeSeriesDataSet class, which simplified managing encoder-decoder windows and handling covariates.
-
-The framework integration with PyTorch Lightning allowed us to streamline the training process and experiment with various hyperparameters efficiently. The ability to visualize predictions and interpret model components, such as attention weights, added significant value to our analysis and model refinement.
+For our project we used TorchMetrics, whicg can ensure reliable monitoring and comparison of your model's performance, such as accuracy metric, across experiments.
+We tried to use the third-party framework PyTorch Forecasting in our project, but couldn't implemented in the correct way, since some data preprocessing is necessary. So it is in the backlog list to be implemented.  PyTorch Forecasting helps in handling the time-series forecasting aspect of our work, which involved predicting the parity price of USD/CHF combined with economic calendar data. It provides powerful tools such as the Temporal Fusion Transformer (TFT) model, which performs well in capturing relationships across time-varying covariates and static features.
 
 ## Coding environment
 
