@@ -25,6 +25,7 @@ dependencies = [
     "pytorch-lightning>=2.5.0.post0",
     "scikit-learn>=1.6.0",
     "torch>=2.5.1",
+    "torchmetrics>=1.6.1",
     "tqdm>=4.67.1",
     "transformers>=4.47.1",
     "typer>=0.15.1",
