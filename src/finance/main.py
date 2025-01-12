@@ -57,10 +57,13 @@ def main(cfg: DictConfig):
 
     # Evaluate the model
     print(f"Evaluating {cfg.model_name} model...")
+    # Evaluate the model
     evaluate_model(
-        checkpoint_path,
-        preprocessed_file,
-        batch_size=cfg.model.get("batch_size", 32)  # Default to 32 if not defined
+        checkpoint_path=checkpoint_path,
+        preprocessed_file=preprocessed_file,
+        batch_size=32,
+        task="binary",  # Specify task type: "binary" or "multiclass"
+        num_classes=2,  # Specify number of classes
     )
 
 if __name__ == "__main__":

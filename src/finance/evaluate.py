@@ -3,6 +3,7 @@ import torch
 from pytorch_lightning import Trainer
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.metrics import classification_report, accuracy_score
+from torchmetrics.classification import Accuracy, Precision, Recall, F1Score
 from data import get_training_data
 from model import DeepLearningModel
 
@@ -31,6 +32,15 @@ def evaluate_model(checkpoint_path: Path, preprocessed_file: Path, **kwargs):
     # Set the model to evaluation mode
     model.eval()
 
+    # Determine task type and initialize metrics
+    task_type = kwargs.get("task", "binary")  # Default to binary classification
+    num_classes = kwargs.get("num_classes", 2)
+
+    accuracy_metric = Accuracy(task=task_type, num_classes=num_classes, average="macro")
+    precision_metric = Precision(task=task_type, num_classes=num_classes, average="macro")
+    recall_metric = Recall(task=task_type, num_classes=num_classes, average="macro")
+    f1_metric = F1Score(task=task_type, num_classes=num_classes, average="macro")
+
     # Run inference
     all_preds = []
     all_labels = []
@@ -38,17 +48,25 @@ def evaluate_model(checkpoint_path: Path, preprocessed_file: Path, **kwargs):
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
             y_pred = model(X_batch)  # Forward pass
-            preds = torch.argmax(y_pred, axis=1).cpu().numpy()
-            all_preds.extend(preds)
-            all_labels.extend(y_batch.cpu().numpy())
+            preds = torch.argmax(y_pred, axis=1)
+            all_preds.append(preds)
+            all_labels.append(y_batch)
 
-    # Calculate metrics
-    accuracy = accuracy_score(all_labels, all_preds)
+    # Concatenate all predictions and labels
+    all_preds = torch.cat(all_preds)
+    all_labels = torch.cat(all_labels)
+
+    # Compute metrics
+    accuracy = accuracy_metric(all_preds, all_labels).item()
+    precision = precision_metric(all_preds, all_labels).item()
+    recall = recall_metric(all_preds, all_labels).item()
+    f1 = f1_metric(all_preds, all_labels).item()
+
+    # Print metrics
     print(f"Model Accuracy: {accuracy:.4f}")
-    
-    # Detailed metrics
-    print("\nClassification Report:")
-    print(classification_report(all_labels, all_preds))
+    # print(f"Model Precision: {precision:.4f}")
+    # print(f"Model Recall: {recall:.4f}")
+    # print(f"Model F1 Score: {f1:.4f}")
 
 if __name__ == "__main__":
     # Path to the trained model checkpoint
