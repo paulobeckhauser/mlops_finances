@@ -1,16 +1,20 @@
+# mypy: disallow-untyped-defs
 from pathlib import Path
-import torch
-from pytorch_lightning import Trainer
-from torch.utils.data import DataLoader, TensorDataset
-from sklearn.metrics import classification_report, accuracy_score
-from torchmetrics.classification import Accuracy, Precision, Recall, F1Score
-from data import get_training_data
-from model import DeepLearningModel
 
-def evaluate_model(checkpoint_path: Path, preprocessed_file: Path, **kwargs):
+import torch
+from torch.utils.data import DataLoader, TensorDataset
+from torchmetrics.classification import Accuracy, F1Score, Precision, Recall
+
+from finance.data import get_training_data
+from finance.model import DeepLearningModel
+
+
+def evaluate_model(
+    checkpoint_path: Path, preprocessed_file: Path, **kwargs: int
+) -> None:
     """
     Evaluate a trained model on the test dataset.
-    
+
     Args:
         checkpoint_path (Path): Path to the trained model checkpoint.
         preprocessed_file (Path): Path to the preprocessed dataset.
@@ -24,7 +28,10 @@ def evaluate_model(checkpoint_path: Path, preprocessed_file: Path, **kwargs):
         torch.tensor(X_test.values, dtype=torch.float32),
         torch.tensor(y_test.values, dtype=torch.long),
     )
-    test_loader = DataLoader(test_dataset, batch_size=kwargs.get("batch_size", 32), shuffle=False)
+
+    test_loader = DataLoader(
+        test_dataset, batch_size=kwargs.get("batch_size", 32), shuffle=False
+    )
 
     # Load the model from the checkpoint
     model = DeepLearningModel.load_from_checkpoint(checkpoint_path=checkpoint_path)
@@ -37,7 +44,9 @@ def evaluate_model(checkpoint_path: Path, preprocessed_file: Path, **kwargs):
     num_classes = kwargs.get("num_classes", 2)
 
     accuracy_metric = Accuracy(task=task_type, num_classes=num_classes, average="macro")
-    precision_metric = Precision(task=task_type, num_classes=num_classes, average="macro")
+    precision_metric = Precision(
+        task=task_type, num_classes=num_classes, average="macro"
+    )
     recall_metric = Recall(task=task_type, num_classes=num_classes, average="macro")
     f1_metric = F1Score(task=task_type, num_classes=num_classes, average="macro")
 
@@ -48,25 +57,26 @@ def evaluate_model(checkpoint_path: Path, preprocessed_file: Path, **kwargs):
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
             y_pred = model(X_batch)  # Forward pass
-            preds = torch.argmax(y_pred, axis=1)
+            preds = torch.argmax(y_pred, axis=1)  # type: ignore [call-arg]
             all_preds.append(preds)
             all_labels.append(y_batch)
 
     # Concatenate all predictions and labels
-    all_preds = torch.cat(all_preds)
-    all_labels = torch.cat(all_labels)
+    preds = torch.cat(all_preds)
+    labels = torch.cat(all_labels)
 
     # Compute metrics
-    accuracy = accuracy_metric(all_preds, all_labels).item()
-    precision = precision_metric(all_preds, all_labels).item()
-    recall = recall_metric(all_preds, all_labels).item()
-    f1 = f1_metric(all_preds, all_labels).item()
+    accuracy = accuracy_metric(preds, preds).item()
+    precision = precision_metric(preds, preds).item()
+    recall = recall_metric(preds, preds).item()
+    f1 = f1_metric(preds, preds).item()
 
     # Print metrics
     print(f"Model Accuracy: {accuracy:.4f}")
-    # print(f"Model Precision: {precision:.4f}")
-    # print(f"Model Recall: {recall:.4f}")
-    # print(f"Model F1 Score: {f1:.4f}")
+    print(f"Model Precision: {precision:.4f}")
+    print(f"Model Recall: {recall:.4f}")
+    print(f"Model F1 Score: {f1:.4f}")
+
 
 if __name__ == "__main__":
     # Path to the trained model checkpoint
