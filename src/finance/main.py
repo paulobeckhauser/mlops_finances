@@ -6,7 +6,7 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 
 from evaluate import evaluate_model
-from finance.data import preprocess
+from finance.data import preprocess, fetch_economic_calendar, fetch_price_data
 from train import train_model
 
 # Redirect stdout to the logger

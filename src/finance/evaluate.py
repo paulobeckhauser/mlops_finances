@@ -73,9 +73,6 @@ def evaluate_model(
 
     # Print metrics
     print(f"Model Accuracy: {accuracy:.4f}")
-    print(f"Model Precision: {precision:.4f}")
-    print(f"Model Recall: {recall:.4f}")
-    print(f"Model F1 Score: {f1:.4f}")
 
 
 if __name__ == "__main__":
