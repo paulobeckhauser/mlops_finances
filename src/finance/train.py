@@ -1,10 +1,13 @@
 from pathlib import Path
+
+import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import DataLoader, TensorDataset
-import torch
-from data import get_training_data
-from model import DeepLearningModel
+
+from finance.data import get_training_data
+from finance.model import DeepLearningModel
+
 
 def train_model(model_name, preprocessed_file: Path, **kwargs):
     """
@@ -32,7 +35,7 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
         model = DeepLearningModel(
             input_size=X_train.shape[1],
             num_classes=kwargs.get("num_classes", 2),
-            lr=kwargs.get("lr", 0.001)
+            lr=kwargs.get("lr", 0.001),
         )
 
         # Define callbacks (e.g., checkpointing)
@@ -54,7 +57,9 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
         # Train the model
         trainer.fit(model, train_loader, val_loader)
     else:
-        raise ValueError(f"Model {model_name} is not supported with PyTorch Lightning yet.")
+        raise ValueError(
+            f"Model {model_name} is not supported with PyTorch Lightning yet."
+        )
 
 
 if __name__ == "__main__":
