@@ -5,3 +5,5 @@ torch==2.5.1
 tqdm==4.67.1
 typer==0.15.1
 yfinance==0.2.51
+mypy==1.11.2
+mypy_extensions==1.0.0
