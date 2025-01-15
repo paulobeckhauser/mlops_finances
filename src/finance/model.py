@@ -70,6 +70,7 @@ class DeepLearningModel(pl.LightningModule):
         x = self.fc3(x)  # Output logits (raw predictions)
         return x
 
+    # def training_step(self, batch, batch_idx):
     def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
         X_batch, y_batch = batch
         y_pred = self(X_batch)
