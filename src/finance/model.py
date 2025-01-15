@@ -3,6 +3,7 @@ from sklearn.linear_model import LogisticRegression
 import torch.nn as nn
 import torch
 import pytorch_lightning as pl
+from typing import Tuple
 
 def get_model(model_name, **kwargs):
     """
@@ -57,7 +58,8 @@ class DeepLearningModel(pl.LightningModule):
         x = self.fc3(x)  # Output logits (raw predictions)
         return x
 
-    def training_step(self, batch, batch_idx):
+    # def training_step(self, batch, batch_idx):
+    def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
