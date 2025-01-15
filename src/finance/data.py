@@ -1,8 +1,9 @@
+# mypy: disallow-untyped-defs
 from pathlib import Path
+from typing import Any
 
 import investpy
 import pandas as pd
-import typer
 import yfinance as yf
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
@@ -13,7 +14,7 @@ class MyDataset(Dataset):
 
     def __init__(self, raw_data_path: Path) -> None:
         self.data_path = raw_data_path
-        self.dataframes = {}
+        self.dataframes: dict[str, pd.DataFrame] = {}
 
     def load_data(self) -> None:
         """Load data from raw data path."""
@@ -33,10 +34,10 @@ class MyDataset(Dataset):
         df_calendar = self.dataframes["economic_calendar"]
         df_exchange = self.dataframes["exchange_rates"]
 
-        df_exchange['timestamp'] = pd.to_datetime(df_exchange['Datetime'])
+        df_exchange["timestamp"] = pd.to_datetime(df_exchange["Datetime"])
 
         # pd.set_option('display.max_columns', None)  # Show all columns
-        
+
         # print(df_exchange.head(10))
 
         # print(df_calendar.shape)
@@ -49,17 +50,17 @@ class MyDataset(Dataset):
         # print(df_calendar_show.shape)
         # print(df_calendar_show['event'].unique())
 
-        # 1st Decision -> 
+        # 1st Decision ->
 
         # df_calendar['time'] = df_calendar['time'].replace('All Day', '00:00')
         # df_calendar['time'] = df_calendar['time'].replace('ll DayA', '00:00')
         # df_calendar['time'] = df_calendar['time'].fillna('00:00')
         # df_calendar['timestamp'] = pd.to_datetime(df_calendar['date'] + ' ' + df_calendar['time'], errors='coerce', dayfirst=True)
-        df_calendar['timestamp'] = pd.to_datetime(
-            df_calendar['date'] + ' ' + df_calendar['time'],
-            format='%d/%m/%Y %H:%M',  # Adjust the format to match your data
-            errors='coerce',
-            dayfirst=True  # Since day is the first part of the date
+        df_calendar["timestamp"] = pd.to_datetime(
+            df_calendar["date"] + " " + df_calendar["time"],
+            format="%d/%m/%Y %H:%M",  # Adjust the format to match your data
+            errors="coerce",
+            dayfirst=True,  # Since day is the first part of the date
         )
         # print(df_calendar.shape)
 
@@ -72,14 +73,12 @@ class MyDataset(Dataset):
             dayfirst=True,
         )
 
-        
-
-        df_exchange['timestamp'] = df_exchange['timestamp'].dt.tz_localize(None)
-        df_calendar['timestamp'] = df_calendar['timestamp'].dt.tz_localize(None)
+        df_exchange["timestamp"] = df_exchange["timestamp"].dt.tz_localize(None)
+        df_calendar["timestamp"] = df_calendar["timestamp"].dt.tz_localize(None)
 
         # df_calendar_test = df_calendar[df_calendar['event'] == 'Initial Jobless Claims']
         # print(df_calendar_test)
-        pd.set_option('display.max_columns', None)  # Show all columns
+        pd.set_option("display.max_columns", None)  # Show all columns
         # print(df_exchange.head())
         # print(df_calendar.head())
 
@@ -87,14 +86,13 @@ class MyDataset(Dataset):
         # print("Null values in df_exchange['timestamp']:", df_exchange['timestamp'].isna().sum())
         # print("Null values in df_calendar['timestamp']:", df_calendar['timestamp'].isna().sum())
 
-
         # Drop rows with null timestamps
-        df_exchange = df_exchange.dropna(subset=['timestamp'])
-        df_calendar = df_calendar.dropna(subset=['timestamp'])
+        df_exchange = df_exchange.dropna(subset=["timestamp"])
+        df_calendar = df_calendar.dropna(subset=["timestamp"])
 
         # Sort DataFrames by the timestamp column
-        df_exchange = df_exchange.sort_values(by='timestamp').reset_index(drop=True)
-        df_calendar = df_calendar.sort_values(by='timestamp').reset_index(drop=True)
+        df_exchange = df_exchange.sort_values(by="timestamp").reset_index(drop=True)
+        df_calendar = df_calendar.sort_values(by="timestamp").reset_index(drop=True)
 
         # print("Sample of df_exchange['timestamp']:", df_exchange['timestamp'].head())
         # print("Sample of df_calendar['timestamp']:", df_calendar['timestamp'].head())
@@ -115,28 +113,36 @@ class MyDataset(Dataset):
         # print(merged_data.head())
         # print(merged_data.shape)
         # # Filter rows where 'event' column is not null
-        merged_data = merged_data[merged_data['event'].notnull()]
-        merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
+        merged_data = merged_data[merged_data["event"].notnull()]
+        merged_data.fillna({"actual": 0, "forecast": 0, "previous": 0}, inplace=True)
 
         # # # # Lagged Prices: Add previous price values to capture trends.
-        merged_data['Close_Lag1'] = merged_data['Price Close'].shift(1)
-        merged_data['Close_Lag2'] = merged_data['Price Close'].shift(2)
+        merged_data["Close_Lag1"] = merged_data["Price Close"].shift(1)
+        merged_data["Close_Lag2"] = merged_data["Price Close"].shift(2)
 
         # # # # Price Change: Calculate the price change between consecutive rows.
-        merged_data['price_change'] = merged_data['Price Close'] - merged_data['Close_Lag1']
+        merged_data["price_change"] = (
+            merged_data["Price Close"] - merged_data["Close_Lag1"]
+        )
 
         # # # # Percentage Change: Calculate the percentage change in price.
-        merged_data['price_pct_change'] = (merged_data['price_change'] / merged_data['Close_Lag1']) * 100
+        merged_data["price_pct_change"] = (
+            merged_data["price_change"] / merged_data["Close_Lag1"]
+        ) * 100
 
-        merged_data['actual'] = pd.to_numeric(merged_data['actual'], errors='coerce')
-        merged_data['forecast'] = pd.to_numeric(merged_data['forecast'], errors='coerce')
-        merged_data['previous'] = pd.to_numeric(merged_data['previous'], errors='coerce')
+        merged_data["actual"] = pd.to_numeric(merged_data["actual"], errors="coerce")
+        merged_data["forecast"] = pd.to_numeric(
+            merged_data["forecast"], errors="coerce"
+        )
+        merged_data["previous"] = pd.to_numeric(
+            merged_data["previous"], errors="coerce"
+        )
 
-        merged_data.fillna({'actual': 0, 'forecast': 0, 'previous': 0}, inplace=True)
+        merged_data.fillna({"actual": 0, "forecast": 0, "previous": 0}, inplace=True)
 
         # Delta Features: Compute differences between actual and forecast values:
-        merged_data['delta_forecast'] = merged_data['actual'] - merged_data['forecast']
-        merged_data['delta_previous'] = merged_data['actual'] - merged_data['previous']
+        merged_data["delta_forecast"] = merged_data["actual"] - merged_data["forecast"]
+        merged_data["delta_previous"] = merged_data["actual"] - merged_data["previous"]
 
         # # # Impact Score: Convert categorical impact values into numerical scores:
         # impact_mapping = {'Low': 1, 'Medium': 2, 'High': 3}
@@ -149,11 +155,13 @@ class MyDataset(Dataset):
         # # print(f"Unique values in 'importance': {unique_importance_values}")
 
         # Fill missing values and reassign the column
-        merged_data['importance'] = merged_data['importance'].fillna('Unknown')
+        merged_data["importance"] = merged_data["importance"].fillna("Unknown")
 
-        importance_mapping = {'Low': 1, 'Medium': 2, 'High': 3, 'Unknown': 0}
-        merged_data['importance_score'] = merged_data['importance'].map(importance_mapping)
-        merged_data['Price_Direction'] = (merged_data['price_change'] > 0).astype(int)
+        importance_mapping = {"Low": 1, "Medium": 2, "High": 3, "Unknown": 0}
+        merged_data["importance_score"] = merged_data["importance"].map(
+            importance_mapping
+        )
+        merged_data["Price_Direction"] = (merged_data["price_change"] > 0).astype(int)
 
         # Save the processed data
         output_folder.mkdir(parents=True, exist_ok=True)
@@ -163,39 +171,38 @@ class MyDataset(Dataset):
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
-        return len(self.dataframe.get("merged_data", []))
+        return len(self.dataframes.get("merged_data", []))
 
-    def __getitem__(self, index: int):
+    def __getitem__(self, index: int) -> Any:
         """Return a given sample from the dataset."""
         if "merged_data" not in self.dataframes:
             raise ValueError("Data has not been preprocessed yet!")
         return self.dataframes["merged_data"].iloc[index]
 
-def fetch_economic_calendar(output_path: Path, start_date:str, end_date: str):
+
+def fetch_economic_calendar(output_path: Path, start_date: str, end_date: str) -> None:
     """Fetch raw economic data and save it to the specified path.
-        Right now, we are getting time zone GMT+01:00
+    Right now, we are getting time zone GMT+01:00
     """
     # print("Fetching raw economic calendar data...")
     calendar_data = investpy.economic_calendar(
         time_zone="GMT",  # Set your desired time zone
         from_date=start_date,
-        to_date=end_date
+        to_date=end_date,
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     calendar_data.to_csv(output_path, index=False)
-    #####3
+
     # pd.set_option('display.max_columns', None)  # Show all columns
     # print(calendar_data.columns)
     # filtered_df = calendar_data[(calendar_data['zone'] == 'brazil')]
     # print(filtered_df.head())
-    ###3
-
     # print(f"Data saved to {output_path}")
 
 
 def fetch_price_data(
     output_path: Path, ticker: str, interval: str = "1h", period: str = "1mo"
-):
+) -> None:
     """
     Fetch historical price data for a given ticker and save it to the specified path.
 
@@ -228,7 +235,7 @@ def fetch_price_data(
         # print(f"Price data for {ticker} saved to {output_path}")
     else:
         print(f"No data found for {ticker}. Please check the ticker or parameters.")
-    #####3
+
     # pd.set_option('display.max_columns', None)  # Show all columns
     # print(data.columns)
     # print(data.shape)
@@ -238,7 +245,6 @@ def fetch_price_data(
     # print(filtered_df.shape)
     # unique_filtered = data['Volume'].unique()
     # print(unique_filtered)
-    ###3
 
 
 def preprocess(raw_data_path: Path, output_folder: Path) -> None:
@@ -248,7 +254,9 @@ def preprocess(raw_data_path: Path, output_folder: Path) -> None:
     dataset.preprocess(output_folder)
 
 
-def load_preprocessed_data(preprocessed_file: Path):
+def load_preprocessed_data(
+    preprocessed_file: Path,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Load the preprocessed data and prepare it for training and evaluation.
 
@@ -278,9 +286,10 @@ def load_preprocessed_data(preprocessed_file: Path):
 
 def get_training_data(
     preprocessed_file: Path, test_size: float = 0.2, random_state: int = 42
-):
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-    Load the preprocessed data, prepare features and labels, and split into training and testing sets.
+    Load the preprocessed data, prepare features and labels, and split into training and
+    testing sets.
 
     Args:
         preprocessed_file (Path): Path to the preprocessed CSV file.
@@ -312,4 +321,5 @@ if __name__ == "__main__":
     # Fetch data
     # fetch_economic_calendar(calendar_output_path, '01/12/2024', '31/12/2024')
     # fetch_price_data(usd_chf_output_path, ticker='USDCHF=X', interval='1h', period='1mo')
+    # import typer
     # typer.run(preprocess)

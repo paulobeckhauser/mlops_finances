@@ -1,0 +1,21 @@
+[flake8]
+max-line-length = 88
+
+exclude =
+    functions/venv
+    frontend
+
+ignore =
+    # Missing docstring in public module (file begin)
+    D100,
+    D102,
+    # Missing docstring in public function
+    D103,
+    # Missing docstring in magic method (__str__, etc)
+    D105,
+    # Missing docstring in __init__
+    D107,
+    # Line break occurred before a binary operator
+    W503
+    # Line break occurred before a binary operator
+    E203
