@@ -271,7 +271,6 @@ def load_preprocessed_data(
     merged_data = pd.read_csv(preprocessed_file)
 
     # Drop rows with NaN values in the specified columns
-    print("Dropping rows with NaN values in X...")
     X = merged_data[
         ["Close_Lag1", "Close_Lag2", "importance_score", "delta_forecast"]
     ].dropna()
@@ -308,8 +307,6 @@ def get_training_data(
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=test_size, random_state=random_state
     )
-
-    print("Data successfully split!")
     return X_train, X_test, y_train, y_test
 
 
