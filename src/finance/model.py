@@ -49,8 +49,8 @@ def get_model(model_name: str, **kwargs: int) -> Any:
 def get_loaders(
     X_train: pd.DataFrame,
     X_test: pd.DataFrame,
-    y_train: pd.DataFrame,
-    y_test: pd.DataFrame,
+    y_train: pd.Series,
+    y_test: pd.Series,
 ) -> tuple[DataLoader, DataLoader]:
     train_dataset = TensorDataset(
         torch.tensor(X_train.values, dtype=torch.float32),
