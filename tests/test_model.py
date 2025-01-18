@@ -25,8 +25,8 @@ def test_get_model() -> None:
 
     X_train = pd.DataFrame(data={"values": x[:128]})
     X_test = pd.DataFrame(data={"values": x[128:]})
-    y_train = pd.DataFrame(data={"values": y[:128].squeeze()})
-    y_test = pd.DataFrame(data={"values": y[128:].squeeze()})
+    y_train = pd.Series((y[:128] > 0.5).squeeze(), name="values")
+    y_test = pd.Series((y[128:] > 0.5).squeeze(), name="values")
 
     train_loader, val_loader = get_loaders(X_train, X_test, y_train, y_test)
     trainer = Trainer(max_epochs=10)
