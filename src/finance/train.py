@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import torch
+import logging
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import DataLoader, TensorDataset
@@ -8,6 +9,10 @@ from torch.utils.data import DataLoader, TensorDataset
 from finance.data import get_training_data
 from finance.model import DeepLearningModel
 
+
+# Set up logging
+logging.basicConfig(level=logging.INFO) # Set the logging level (e.g., INFO, DEBUG, ERROR)
+log = logging.getLogger(__name__) # Create a logger instance
 
 def train_model(model_name, preprocessed_file: Path, **kwargs):
     """
@@ -38,6 +43,10 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
             lr=kwargs.get("lr", 0.001),
         )
 
+        # Define the new folder path for saving models
+        model_dir = Path("model")
+        model_dir.mkdir(parents=True, exist_ok=True) # Ensure the directory exists
+
         # Define callbacks (e.g., checkpointing)
         checkpoint_callback = ModelCheckpoint(
             monitor="val_loss",
@@ -56,11 +65,16 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
 
         # Train the model
         trainer.fit(model, train_loader, val_loader)
+
+        # Save the final model weights manually
+        save_path = model_dir / "model.pth"
+        torch.save(model.state_dict(), save_path)
+        log.info(f"Final model save at {save_path}")
+
     else:
         raise ValueError(
             f"Model {model_name} is not supported with PyTorch Lightning yet."
         )
-
 
 if __name__ == "__main__":
     # Define model name and file path
