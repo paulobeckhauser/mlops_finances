@@ -47,11 +47,15 @@ def main(cfg: DictConfig) -> None:
 
     # Train the model
     print(f"Training {cfg.model_name} model...")
-    train_model(
+    model = train_model(
         cfg.model_name,  # Positional argument
         preprocessed_file,
         **cfg.model,  # Unpack model-specific parameters only
     )
+
+
+    # Save the trained model
+    # checkpoint_path = Path("")
 
     # Evaluate the model
     print(f"Evaluating {cfg.model_name} model...")
