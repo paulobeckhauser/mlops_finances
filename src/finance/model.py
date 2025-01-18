@@ -1,15 +1,14 @@
 # mypy: disallow-untyped-defs
 from typing import Any
 
+import pandas as pd
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-import torch.nn as nn
-import torch
-import pytorch_lightning as pl
-from typing import Tuple
+from torch.utils.data import DataLoader, TensorDataset
+
 
 def get_model(model_name: str, **kwargs: int) -> Any:
     """
@@ -47,6 +46,27 @@ def get_model(model_name: str, **kwargs: int) -> Any:
         raise ValueError(f"Unknown model name: {model_name}")
 
 
+def get_loaders(
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+    y_train: pd.Series,
+    y_test: pd.Series,
+) -> tuple[DataLoader, DataLoader]:
+    train_dataset = TensorDataset(
+        torch.tensor(X_train.values, dtype=torch.float32),
+        torch.tensor(y_train.values, dtype=torch.long),
+    )
+    val_dataset = TensorDataset(
+        torch.tensor(X_test.values, dtype=torch.float32),
+        torch.tensor(y_test.values, dtype=torch.long),
+    )
+
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=32)
+
+    return train_loader, val_loader
+
+
 class DeepLearningModel(pl.LightningModule):
     """
     PyTorch Lightning model for classification.
@@ -71,21 +91,23 @@ class DeepLearningModel(pl.LightningModule):
         return x
 
     # def training_step(self, batch, batch_idx):
-    def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
+    def training_step(
+        self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
+    ) -> torch.Tensor:
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("train_loss", loss)
         return loss
 
-    def validation_step(self, batch: int, batch_idx: int) -> float:
+    def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("val_loss", loss)
         return loss
 
-    def test_step(self, batch: int, batch_idx: int) -> float:
+    def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
