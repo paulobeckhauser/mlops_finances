@@ -195,3 +195,5 @@ outputs/*
 
 
 /data
+
+dtu_mlops_data/
