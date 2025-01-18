@@ -21,8 +21,8 @@ will check the repositories and the code to verify your answers.
 * [✅] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
 * [✅] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
-* [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
+* [✅] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
+* [✅] Do a bit of code typing and remember to document essential parts of your code (M7)
 * [ ] Setup version control for your data or part of your data (M8)
 * [ ] Add command line interfaces and project commands to your code where it makes sense (M9)
 * [ ] Construct one or multiple docker files for your code (M10)
@@ -149,6 +149,7 @@ s242479, S243418, s244086, s225526
 > Answer:
 For our project we used TorchMetrics, whicg can ensure reliable monitoring and comparison of your model's performance, such as accuracy metric, across experiments.
 We tried to use the third-party framework PyTorch Forecasting in our project, but couldn't implemented in the correct way, since some data preprocessing is necessary. So it is in the backlog list to be implemented.  PyTorch Forecasting helps in handling the time-series forecasting aspect of our work, which involved predicting the parity price of USD/CHF combined with economic calendar data. It provides powerful tools such as the Temporal Fusion Transformer (TFT) model, which performs well in capturing relationships across time-varying covariates and static features.
+We also implemented Black, which is an open-source tool to automate the process of following the best coding practices(e.g. pep8) in the python code.
 
 ## Coding environment
 
@@ -224,7 +225,7 @@ We used docstrings to describe functions, classes, and modules, detailing their 
 >
 > Answer:
 
---- question 7 fill here ---
+In total, we have implemented 4 tests. The first test verifies the raw data, ensuring there are exactly two non-empty files. The second test focuses on preprocessing, validating that the data transformations work as expected. The third test evaluates the model, testing its initialization, forward pass, and training functionality. Finally, the fourth test targets the API, ensuring it handles requests and returns responses correctly. These tests cover the most critical parts of the application: data integrity, preprocessing, model performance, and API functionality.
 
 ### Question 8
 
@@ -239,7 +240,9 @@ We used docstrings to describe functions, classes, and modules, detailing their 
 >
 > Answer:
 
---- question 8 fill here ---
+The total code coverage of our code is currently 23%, which includes all our source code. This number indicates that we are far from achieving 100% coverage, highlighting areas of the code that are not yet tested. Increasing test coverage is on our to-do list, as it is essential for improving the reliability and robustness of our application.
+
+However, even with 100% code coverage, we would not fully trust the code to be error-free. Code coverage only ensures that the lines of code are executed during testing, but it does not guarantee the correctness of the logic or handle all edge cases. Tests might miss certain scenarios, or the logic might fail under specific conditions. Therefore, while striving for high coverage is important, the quality and thoroughness of the tests, combined with other strategies like code reviews and performance testing, are crucial for ensuring a robust and error-free application.
 
 ### Question 9
 
