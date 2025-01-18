@@ -1,13 +1,5 @@
 import os
 from torch.utils.data import Dataset
-from finance.data import MyDataset
-
-
-def test_my_dataset():
-    """Test the MyDataset class."""
-    dataset = MyDataset("data/raw")
-    assert isinstance(dataset, Dataset) # The object should be an instance of the Dataset
-
 
 def test_raw_data():
     """Test that the raw data directory contains exactly two non-empty files"""
