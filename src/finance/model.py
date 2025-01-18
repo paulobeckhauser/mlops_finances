@@ -48,23 +48,6 @@ def get_model(model_name: str, **kwargs: int) -> Any:
         )
     else:
         raise ValueError(f"Unknown model name: {model_name}")
-    
-# def get_loaders(
-#     X_train: torch.Tensor,
-#     X_test: torch.Tensor,
-#     y_train: torch.Tensor,
-#     y_test: torch.Tensor,
-#     batch_size: int = 32,
-# ):
-#     # Create TensorDatasets
-#     train_dataset = TensorDataset(X_train, y_train)
-#     test_dataset = TensorDataset(X_test, y_test)
-
-#     # Create DataLoaders
-#     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-#     val_loader = DataLoader(test_dataset, batch_size=batch_size)
-
-#     return train_loader, val_loader
 
 def get_loaders(
     X_train: pd.DataFrame,
@@ -101,7 +84,6 @@ def get_loaders(
     val_loader = DataLoader(val_dataset, batch_size=batch_size)
 
     return train_loader, val_loader
-
 
 class DeepLearningModel(pl.LightningModule):
     """
