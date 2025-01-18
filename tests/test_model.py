@@ -1,6 +1,7 @@
 # mypy: disallow-untyped-defs
 import numpy as np
 import pandas as pd
+import pytest
 from pytorch_lightning import Trainer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -14,6 +15,16 @@ def test_get_model() -> None:
 
     logistic_regression = get_model("logistic_regression")
     assert type(logistic_regression) is LogisticRegression
+
+    with pytest.raises(ValueError) as error:
+        get_model("deep_learning")
+    assert (
+        str(error.value) == "For deep learning models, 'input_size' must be specified."
+    )
+
+    with pytest.raises(ValueError) as error:
+        get_model("unknown")
+    assert str(error.value) == "Unknown model name: unknown"
 
     deep_learning = get_model("deep_learning", input_size=1)
     assert type(deep_learning) is DeepLearningModel
