@@ -5,10 +5,9 @@ from pathlib import Path
 import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
-from torch.utils.data import DataLoader, TensorDataset
 
 from finance.data import get_training_data
-from finance.model import DeepLearningModel
+from finance.model import DeepLearningModel, get_loaders
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -25,18 +24,7 @@ def train_model(
         # Load training and testing data
         X_train, X_test, y_train, y_test = get_training_data(preprocessed_file)
 
-        # Convert data to PyTorch tensors
-        train_dataset = TensorDataset(
-            torch.tensor(X_train.values, dtype=torch.float32),
-            torch.tensor(y_train.values, dtype=torch.long),
-        )
-        val_dataset = TensorDataset(
-            torch.tensor(X_test.values, dtype=torch.float32),
-            torch.tensor(y_test.values, dtype=torch.long),
-        )
-
-        train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-        val_loader = DataLoader(val_dataset, batch_size=32)
+        train_loader, val_loader = get_loaders(X_train, X_test, y_train, y_test)
 
         # Initialize the PyTorch Lightning model
         model = DeepLearningModel(

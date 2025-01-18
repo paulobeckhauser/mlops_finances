@@ -1,11 +1,13 @@
 # mypy: disallow-untyped-defs
 from typing import Any
 
+import pandas as pd
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from torch.utils.data import DataLoader, TensorDataset
 
 
 def get_model(model_name: str, **kwargs: int) -> Any:
@@ -42,6 +44,27 @@ def get_model(model_name: str, **kwargs: int) -> Any:
         )
     else:
         raise ValueError(f"Unknown model name: {model_name}")
+
+
+def get_loaders(
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+    y_train: pd.DataFrame,
+    y_test: pd.DataFrame,
+) -> tuple[DataLoader, DataLoader]:
+    train_dataset = TensorDataset(
+        torch.tensor(X_train.values, dtype=torch.float32),
+        torch.tensor(y_train.values, dtype=torch.long),
+    )
+    val_dataset = TensorDataset(
+        torch.tensor(X_test.values, dtype=torch.float32),
+        torch.tensor(y_test.values, dtype=torch.long),
+    )
+
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=32)
+
+    return train_loader, val_loader
 
 
 class DeepLearningModel(pl.LightningModule):
