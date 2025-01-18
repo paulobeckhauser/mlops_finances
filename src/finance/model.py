@@ -49,20 +49,56 @@ def get_model(model_name: str, **kwargs: int) -> Any:
     else:
         raise ValueError(f"Unknown model name: {model_name}")
     
+# def get_loaders(
+#     X_train: torch.Tensor,
+#     X_test: torch.Tensor,
+#     y_train: torch.Tensor,
+#     y_test: torch.Tensor,
+#     batch_size: int = 32,
+# ):
+#     # Create TensorDatasets
+#     train_dataset = TensorDataset(X_train, y_train)
+#     test_dataset = TensorDataset(X_test, y_test)
+
+#     # Create DataLoaders
+#     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+#     val_loader = DataLoader(test_dataset, batch_size=batch_size)
+
+#     return train_loader, val_loader
+
 def get_loaders(
-    X_train: torch.Tensor,
-    X_test: torch.Tensor,
-    y_train: torch.Tensor,
-    y_test: torch.Tensor,
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+    y_train: pd.Series,
+    y_test: pd.Series,
     batch_size: int = 32,
-):
-    # Create TensorDatasets
-    train_dataset = TensorDataset(X_train, y_train)
-    test_dataset = TensorDataset(X_test, y_test)
+) -> Tuple[DataLoader, DataLoader]:
+    """
+    Create DataLoaders for training and validation datasets.
+
+    Args:
+        X_train (pd.DataFrame): Features for training data.
+        X_test (pd.DataFrame): Features for validation data.
+        y_train (pd.Series): Labels for training data.
+        y_test (pd.Series): Labels for validation data.
+        batch_size (int): Batch size for the DataLoaders. Default is 32.
+
+    Returns:
+        Tuple[DataLoader, DataLoader]: Training and validation DataLoaders.
+    """
+    # Convert data to PyTorch tensors
+    train_dataset = TensorDataset(
+        torch.tensor(X_train.values, dtype=torch.float32),
+        torch.tensor(y_train.values, dtype=torch.long),
+    )
+    val_dataset = TensorDataset(
+        torch.tensor(X_test.values, dtype=torch.float32),
+        torch.tensor(y_test.values, dtype=torch.long),
+    )
 
     # Create DataLoaders
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(test_dataset, batch_size=batch_size)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size)
 
     return train_loader, val_loader
 
