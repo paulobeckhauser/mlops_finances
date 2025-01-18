@@ -40,15 +40,20 @@ def evaluate_model(
     model.eval()
 
     # Determine task type and initialize metrics
-    task_type = kwargs.get("task", "binary")  # Default to binary classification
-    num_classes = kwargs.get("num_classes", 2)
-
-    accuracy_metric = Accuracy(task=task_type, num_classes=num_classes, average="macro")
-    precision_metric = Precision(
-        task=task_type, num_classes=num_classes, average="macro"
+    task_type = str(kwargs.get("task", "binary"))
+    num_classes = int(kwargs.get("num_classes", 2))
+    accuracy_metric = Accuracy(
+        task=task_type, num_classes=num_classes, average="macro"  # type: ignore [arg-type]
     )
-    recall_metric = Recall(task=task_type, num_classes=num_classes, average="macro")
-    f1_metric = F1Score(task=task_type, num_classes=num_classes, average="macro")
+    precision_metric = Precision(
+        task=task_type, num_classes=num_classes, average="macro"  # type: ignore [arg-type]
+    )
+    recall_metric = Recall(
+        task=task_type, num_classes=num_classes, average="macro"  # type: ignore [arg-type]
+    )
+    f1_metric = F1Score(
+        task=task_type, num_classes=num_classes, average="macro"  # type: ignore [arg-type]
+    )
 
     # Run inference
     all_preds = []

@@ -6,10 +6,7 @@ import torch
 import torch.nn as nn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-import torch.nn as nn
-import torch
-import pytorch_lightning as pl
-from typing import Tuple
+
 
 def get_model(model_name: str, **kwargs: int) -> Any:
     """
@@ -71,21 +68,23 @@ class DeepLearningModel(pl.LightningModule):
         return x
 
     # def training_step(self, batch, batch_idx):
-    def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
+    def training_step(
+        self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
+    ) -> torch.Tensor:
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("train_loss", loss)
         return loss
 
-    def validation_step(self, batch: int, batch_idx: int) -> float:
+    def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("val_loss", loss)
         return loss
 
-    def test_step(self, batch: int, batch_idx: int) -> float:
+    def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
