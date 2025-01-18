@@ -7,8 +7,12 @@ import torch
 import torch.nn as nn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+import torch.nn as nn
+import torch
+import pytorch_lightning as pl
 from torch.utils.data import DataLoader, TensorDataset
-
+from typing import Tuple
+import pandas as pd
 
 def get_model(model_name: str, **kwargs: int) -> Any:
     """
@@ -45,13 +49,27 @@ def get_model(model_name: str, **kwargs: int) -> Any:
     else:
         raise ValueError(f"Unknown model name: {model_name}")
 
-
 def get_loaders(
     X_train: pd.DataFrame,
     X_test: pd.DataFrame,
     y_train: pd.Series,
     y_test: pd.Series,
-) -> tuple[DataLoader, DataLoader]:
+    batch_size: int = 32,
+) -> Tuple[DataLoader, DataLoader]:
+    """
+    Create DataLoaders for training and validation datasets.
+
+    Args:
+        X_train (pd.DataFrame): Features for training data.
+        X_test (pd.DataFrame): Features for validation data.
+        y_train (pd.Series): Labels for training data.
+        y_test (pd.Series): Labels for validation data.
+        batch_size (int): Batch size for the DataLoaders. Default is 32.
+
+    Returns:
+        Tuple[DataLoader, DataLoader]: Training and validation DataLoaders.
+    """
+    # Convert data to PyTorch tensors
     train_dataset = TensorDataset(
         torch.tensor(X_train.values, dtype=torch.float32),
         torch.tensor(y_train.values, dtype=torch.long),
@@ -61,11 +79,11 @@ def get_loaders(
         torch.tensor(y_test.values, dtype=torch.long),
     )
 
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=32)
+    # Create DataLoaders
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size)
 
     return train_loader, val_loader
-
 
 class DeepLearningModel(pl.LightningModule):
     """

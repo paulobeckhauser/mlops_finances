@@ -21,6 +21,7 @@ dependencies = [
     "lightning[extra]>=2.5.0.post0",
     "markdown>=3.7",
     "matplotlib>=3.10.0",
+    "mypy>=1.14.1",
     "pip-chill>=1.0.3",
     "pipreqs>=0.5.0",
     "pytest>=7.4.3",
