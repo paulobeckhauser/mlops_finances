@@ -1,3 +1,4 @@
+# mypy: disallow-untyped-defs
 import logging
 import sys
 from pathlib import Path
@@ -6,7 +7,7 @@ import hydra
 from omegaconf import DictConfig, OmegaConf
 
 from evaluate import evaluate_model
-from finance.data import preprocess, fetch_economic_calendar, fetch_price_data
+from finance.data import fetch_economic_calendar, fetch_price_data, preprocess
 from train import train_model
 
 # Redirect stdout to the logger
@@ -52,7 +53,6 @@ def main(cfg: DictConfig) -> None:
         preprocessed_file,
         **cfg.model,  # Unpack model-specific parameters only
     )
-
 
     # Save the trained model
     # checkpoint_path = Path("")

@@ -1,7 +1,8 @@
+# mypy: disallow-untyped-defs
+import logging
 from pathlib import Path
 
 import torch
-import logging
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.utils.data import DataLoader, TensorDataset
@@ -9,12 +10,13 @@ from torch.utils.data import DataLoader, TensorDataset
 from finance.data import get_training_data
 from finance.model import DeepLearningModel
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
-# Set up logging
-logging.basicConfig(level=logging.INFO) # Set the logging level (e.g., INFO, DEBUG, ERROR)
-log = logging.getLogger(__name__) # Create a logger instance
 
-def train_model(model_name, preprocessed_file: Path, **kwargs):
+def train_model(
+    model_name: str, preprocessed_file: Path, **kwargs: int | float
+) -> None:
     """
     Train a machine learning model based on the specified model_name.
     Currently supports deep learning with PyTorch Lightning.
@@ -39,13 +41,13 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
         # Initialize the PyTorch Lightning model
         model = DeepLearningModel(
             input_size=X_train.shape[1],
-            num_classes=kwargs.get("num_classes", 2),
-            lr=kwargs.get("lr", 0.001),
+            num_classes=int(kwargs.get("num_classes", 2)),
+            lr=float(kwargs.get("lr", 0.001)),
         )
 
         # Define the new folder path for saving models
         model_dir = Path("model")
-        model_dir.mkdir(parents=True, exist_ok=True) # Ensure the directory exists
+        model_dir.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists
 
         # Define callbacks (e.g., checkpointing)
         checkpoint_callback = ModelCheckpoint(
@@ -58,7 +60,7 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
 
         # Initialize PyTorch Lightning Trainer
         trainer = Trainer(
-            max_epochs=kwargs.get("epochs", 10),
+            max_epochs=int(kwargs.get("epochs", 10)),
             callbacks=[checkpoint_callback],
             log_every_n_steps=1,
         )
@@ -75,6 +77,7 @@ def train_model(model_name, preprocessed_file: Path, **kwargs):
         raise ValueError(
             f"Model {model_name} is not supported with PyTorch Lightning yet."
         )
+
 
 if __name__ == "__main__":
     # Define model name and file path
