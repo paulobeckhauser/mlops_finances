@@ -1,3 +1,1 @@
-finance==0.0.1
-finance.egg==info
 torch==2.5.1
