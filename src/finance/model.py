@@ -9,7 +9,9 @@ from sklearn.linear_model import LogisticRegression
 import torch.nn as nn
 import torch
 import pytorch_lightning as pl
+from torch.utils.data import DataLoader, TensorDataset
 from typing import Tuple
+import pandas as pd
 
 def get_model(model_name: str, **kwargs: int) -> Any:
     """
@@ -45,6 +47,23 @@ def get_model(model_name: str, **kwargs: int) -> Any:
         )
     else:
         raise ValueError(f"Unknown model name: {model_name}")
+    
+def get_loaders(
+    X_train: torch.Tensor,
+    X_test: torch.Tensor,
+    y_train: torch.Tensor,
+    y_test: torch.Tensor,
+    batch_size: int = 32,
+):
+    # Create TensorDatasets
+    train_dataset = TensorDataset(X_train, y_train)
+    test_dataset = TensorDataset(X_test, y_test)
+
+    # Create DataLoaders
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(test_dataset, batch_size=batch_size)
+
+    return train_loader, val_loader
 
 
 class DeepLearningModel(pl.LightningModule):

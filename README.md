@@ -297,7 +297,13 @@ In large-scale projects, reproducibility is a critical factor. DVC stores metada
 >
 > Answer:
 
---- question 11 fill here ---
+*We have organized our continuous integration (CI) setup into two separate workflows to ensure a modular and efficient pipeline. Each workflow targets a specific task: one for unit testing, one for linting, and one for deployment. This separation of concerns improves maintainability and scalability as our project grows.
+
+For unit testing, we use pytest to validate our code functionality across multiple operating systems (Ubuntu, macOS, Windows) and Python versions (3.8 to 3.11). This ensures compatibility and robustness in diverse environments. We also implement caching for Python dependencies using GitHub’s actions/cache, which significantly reduces workflow execution time by avoiding redundant installations.
+
+In our linting workflow, we use flake8 to enforce code style and maintain high readability and quality. This step helps catch potential issues early in the development cycle, reducing technical debt over time. This also showed a lot of improvements were needed in our code.
+
+By leveraging caching, running workflows on multiple platforms, and testing against different Python versions, we have created a robust CI pipeline that ensures our code is reliable and production-ready. An example of one of our workflows can be found <[here](https://github.com/paulobeckhauser/mlops_finances/actions/runs/12845256661)>. This setup provides a strong foundation for continuous improvement and rapid iteration in our development process.*
 
 ## Running code and tracking experiments
 
@@ -316,7 +322,7 @@ In large-scale projects, reproducibility is a critical factor. DVC stores metada
 >
 > Answer:
 
---- question 12 fill here ---
+*We configured our experiments using Hydra, a powerful library for managing configuration files and command-line arguments. Hydra allows us to structure experiments through YAML-based config files and override parameters dynamically from the command line. We defined our configuration in the files 'config.yaml' and 'deep_learning.yaml' in the folder 'configs'. In order to be able to run an experiment in our project, just need to run the following code, for example: 'python src/finance/main.py model.epochs=30 model.lr=0.001'*
 
 ### Question 13
 
@@ -331,7 +337,13 @@ In large-scale projects, reproducibility is a critical factor. DVC stores metada
 >
 > Answer:
 
---- question 13 fill here ---
+We ensured reproducibility of experiments by leveraging Hydra for managing configurations and logging. All experiment parameters are defined in YAML configuration files (config.yaml and model-specific files like deep_learning.yaml), ensuring that no information is hard-coded in the scripts. This allows for easy tracking and replication of experiment settings.
+
+Whenever an experiment is run, Hydra automatically organizes outputs into uniquely named directories based on the configuration and timestamp. These directories store logs, checkpoints, and any generated outputs, ensuring that each run is isolated and fully documented.
+
+To reproduce an experiment, one simply needs to reference the configuration used during the run. Hydra also allows for saving and loading configurations, so experiments can be rerun with the exact same settings by pointing to the relevant configuration file or overriding parameters via the command line.
+
+This approach guarantees that all essential details, from hyperparameters to outputs, are preserved, enabling full reproducibility and traceability of experiments.
 
 ### Question 14
 
