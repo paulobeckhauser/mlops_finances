@@ -1,6 +1,7 @@
 # mypy: disallow-untyped-defs
 from typing import Any
 
+import pandas as pd
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
@@ -90,21 +91,23 @@ class DeepLearningModel(pl.LightningModule):
         return x
 
     # def training_step(self, batch, batch_idx):
-    def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
+    def training_step(
+        self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
+    ) -> torch.Tensor:
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("train_loss", loss)
         return loss
 
-    def validation_step(self, batch: int, batch_idx: int) -> float:
+    def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("val_loss", loss)
         return loss
 
-    def test_step(self, batch: int, batch_idx: int) -> float:
+    def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
