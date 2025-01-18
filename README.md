@@ -19,7 +19,7 @@ will check the repositories and the code to verify your answers.
 * [✅] Create the initial file structure using cookiecutter with an appropriate template (M6)
 * [✅] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
 * [✅] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
-* [ ] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
+* [✅] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
 * [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
@@ -186,7 +186,9 @@ The process would be: 1. Install python; 2. Clone the repository with 'git clone
 >
 > Answer:
 
---- question 5 fill here ---
+*From the cookiecutter template, we have filled out the data, dockerfiles, models, src, and test folders. The data folder was used to organize our raw and processed datasets, ensuring a structured workflow. The dockerfiles folder allowed us to set up a reproducible environment for our project using Docker, making collaboration and deployment seamless. The models folder stored our trained models and associated metadata. The src folder contained all the source code, including preprocessing scripts, model training, and evaluation pipelines. Finally, the test folder was used to ensure our code's functionality through unit and integration tests.
+
+We debated removing the notebooks folder since we rarely used Jupyter notebooks during the project, opting for .py files for prototyping and development to maintain a consistent coding style. Additionally, we added checkpoints and logs folders. The checkpoints folder stored intermediate training states, which allowed us to resume training efficiently, while the logs folder contained experiment details, including training metrics and configurations, making it easier to monitor and reproduce results. These additions were critical for managing and tracking our experiments systematically.*
 
 ### Question 6
 
@@ -201,7 +203,9 @@ The process would be: 1. Install python; 2. Clone the repository with 'git clone
 >
 > Answer:
 
---- question 6 fill here ---
+We implemented several rules to ensure code quality and consistency. First, we adhered to the PEP 8 guidelines, which define best practices for Python code formatting, including indentation, naming conventions, and spacing. To automate this process, we used the Black library, which enforces a consistent code style by reformatting our code automatically. This helped us maintain a clean and standardized codebase, reducing potential errors caused by inconsistent formatting.
+
+We used docstrings to describe functions, classes, and modules, detailing their purpose, parameters, and expected behavior. This practice was good for team collaboration and onboarding, as it allowed new contributors to understand the code quickly.
 
 ## Version control
 
@@ -250,7 +254,11 @@ The process would be: 1. Install python; 2. Clone the repository with 'git clone
 >
 > Answer:
 
---- question 9 fill here ---
+* We made extensive use of branches and pull requests (PRs) in our project to streamline collaboration and maintain code quality. We implemented a rule to protect the main branch, requiring that any code merged into it be reviewed and approved by at least one other team member. This ensured that only thoroughly reviewed and tested code made its way into the main branch.
+
+Each team member worked on their own branch, typically named based on the specific feature or bug fix being implemented. This approach kept individual contributions isolated, reducing the risk of conflicts and enabling parallel development. When a feature or fix was ready, the contributor merged their branch with their local main branch to verify compatibility. Afterward, they pushed the changes to a remote branch and created a pull request (PR). The PR served as a platform for discussions, comments, and code reviews.
+
+This workflow improved version control by providing a clear history of changes, encouraging collaboration, and minimizing the risk of introducing bugs into the main branch. It also facilitated accountability and knowledge sharing among team members, making the development process more efficient and reliable.*
 
 ### Question 10
 
@@ -265,7 +273,11 @@ The process would be: 1. Install python; 2. Clone the repository with 'git clone
 >
 > Answer:
 
---- question 10 fill here ---
+We did not use DVC in our project, but there are many scenarios where having version control of data would be highly beneficial. For example, in machine learning projects where datasets evolve over time, DVC can help track changes to the data, such as adding new samples, correcting labels, or preprocessing adjustments. By using DVC, you can maintain a version history of your data, making it easier to roll back to previous versions or analyze the impact of specific changes on model performance.
+
+Another use case is collaborative projects where multiple team members work with the same dataset. DVC allows syncing data across team members without manually sharing large files, ensuring everyone is working with the same version. It also integrates seamlessly with Git, enabling you to version control data alongside your code.
+
+In large-scale projects, reproducibility is a critical factor. DVC stores metadata about which datasets, models, and configurations were used for a specific experiment, ensuring results can be replicated accurately. This makes it an invaluable tool for managing complex data pipelines and improving workflow efficiency in data-driven projects.
 
 ### Question 11
 
