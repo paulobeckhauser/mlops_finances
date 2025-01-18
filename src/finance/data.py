@@ -256,7 +256,7 @@ def preprocess(raw_data_path: Path, output_folder: Path) -> None:
 
 def load_preprocessed_data(
     preprocessed_file: Path,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+) -> tuple[pd.DataFrame, pd.Series]:
     """
     Load the preprocessed data and prepare it for training and evaluation.
 
@@ -285,7 +285,7 @@ def load_preprocessed_data(
 
 def get_training_data(
     preprocessed_file: Path, test_size: float = 0.2, random_state: int = 42
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     """
     Load the preprocessed data, prepare features and labels, and split into training and
     testing sets.

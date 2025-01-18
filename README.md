@@ -147,8 +147,19 @@ s242479, S243418, s244086, s225526
 > *package to do ... and ... in our project*.
 >
 > Answer:
-For our project we used TorchMetrics, whicg can ensure reliable monitoring and comparison of your model's performance, such as accuracy metric, across experiments.
-We tried to use the third-party framework PyTorch Forecasting in our project, but couldn't implemented in the correct way, since some data preprocessing is necessary. So it is in the backlog list to be implemented.  PyTorch Forecasting helps in handling the time-series forecasting aspect of our work, which involved predicting the parity price of USD/CHF combined with economic calendar data. It provides powerful tools such as the Temporal Fusion Transformer (TFT) model, which performs well in capturing relationships across time-varying covariates and static features.
+For our project we used TorchMetrics, which can ensure reliable monitoring and comparison
+of your model's performance, such as accuracy metric, across experiments.
+
+We tried to use the third-party framework PyTorch Forecasting in our project, but couldn't 
+implement it in the correct way, since some data preprocessing is necessary. 
+So it is in the backlog list to be implemented. 
+
+PyTorch Forecasting helps in handling the time-series forecasting aspect of our work, 
+which involved predicting the parity price of USD/CHF combined with economic calendar data. 
+It provides powerful tools such as the Temporal Fusion Transformer (TFT) model, 
+which performs well in capturing relationships across time-varying covariates and static features.
+
+
 We also implemented Black, which is an open-source tool to automate the process of following the best coding practices(e.g. pep8) in the python code.
 
 ## Coding environment
@@ -664,5 +675,3 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
-
-
