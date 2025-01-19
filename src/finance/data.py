@@ -1,6 +1,7 @@
 # mypy: disallow-untyped-defs
 from pathlib import Path
 from typing import Any
+import requests
 
 import investpy
 import pandas as pd
@@ -308,6 +309,24 @@ def get_training_data(
         X, y, test_size=test_size, random_state=random_state
     )
     return X_train, X_test, y_train, y_test
+
+def download_from_public_url(public_url: str, destination_file_name: str) -> None:
+    """
+    Download a file from a public URL.
+    Args:
+        public_url (str): The public URL of the file.
+        destination_file_name (str): The local path to save the downloaded file.
+    """
+    response = requests.get(public_url, stream=True)
+    if response.status_code == 200:
+        # Ensure the destination directory exists
+        Path(destination_file_name).parent.mkdir(parents=True, exist_ok=True)
+        with open(destination_file_name, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Downloaded {public_url} to {destination_file_name}.")
+    else:
+        raise Exception(f"Failed to download file. HTTP Status: {response.status_code}")
 
 
 if __name__ == "__main__":

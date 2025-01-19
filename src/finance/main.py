@@ -2,12 +2,12 @@
 import logging
 import sys
 from pathlib import Path
-
+import os
 import hydra
 from omegaconf import DictConfig, OmegaConf
 
 from evaluate import evaluate_model
-from finance.data import preprocess
+from data import preprocess, download_from_public_url
 from train import train_model
 
 # Redirect stdout to the logger
@@ -27,6 +27,22 @@ def main(cfg: DictConfig) -> None:
     print(f"Training {cfg.model_name} model...")
     print(f"Learning rate: {cfg.model.lr}")
     print(f"Epochs: {cfg.model.epochs}")
+
+    if not os.path.exists("data"):
+        os.makedirs("data")
+        os.makedirs("data/processed")
+        os.makedirs("data/raw")
+
+
+    # Download raw data from public URL
+    economic_calendar_public_url = "https://storage.googleapis.com/my_mlops_data_bucket_finances/data/raw/economic_calendar.csv"
+    economic_calendar_destination_file = "data/raw/economic_calendar.csv"
+
+    usd_chf_prices_public_url = "https://storage.googleapis.com/my_mlops_data_bucket_finances/data/raw/usd_chf_prices.csv"
+    usd_chf_prices_destination_file = "data/raw/usd_chf_prices.csv"
+
+    download_from_public_url(economic_calendar_public_url, economic_calendar_destination_file)
+    download_from_public_url(usd_chf_prices_public_url, usd_chf_prices_destination_file)
 
     # Define paths
     raw_data_path = Path("data/raw/")  # Path to the raw data directory
