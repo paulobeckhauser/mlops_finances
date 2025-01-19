@@ -1,5 +1,5 @@
 # mypy: disallow-untyped-defs
-import numpy as np
+# import numpy as np
 import pandas as pd
 import pytest
 from pytorch_lightning import Trainer
