@@ -418,7 +418,7 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 17 fill here ---
+We used the following services:
 
 ### Question 18
 
@@ -433,7 +433,13 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 18 fill here ---
+We used the Google Cloud Compute Engine to run our machine learning workflows and MLOps pipelines. Specifically, we deployed a virtual machine instance with the following configuration:
+
+Machine type: Standard persistent disk with 10 GB of storage.
+Architecture: x86/64.
+Zone: europe-west1-b for optimized latency and regional availability.
+Operating system: Debian 12 (Bookworm), initialized from the source image debian-12-bookworm-v20250113.
+This virtual machine, provided the flexibility to scale our operations and execute computational tasks efficiently. The instance was encrypted with Google-managed keys for data security, and it was configured to use a lightweight, open-source operating system, ensuring low overhead while running containerized applications. We leveraged this setup for hosting containers that facilitated data preprocessing, training, and evaluation in a secure and cost-effective manner.
 
 ### Question 19
 
@@ -442,7 +448,10 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 19 fill here ---
+![GCP Bucket]()
+![Data Stored to GCP bucket]()
+
+
 
 ### Question 20
 
