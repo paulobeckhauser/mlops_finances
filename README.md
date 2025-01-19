@@ -472,7 +472,7 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
---- question 21 fill here ---
+![GCP Cloud Build History](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/GCP%20Cloud%20Build%20History.png)
 
 ### Question 22
 
