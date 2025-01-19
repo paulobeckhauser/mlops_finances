@@ -448,8 +448,8 @@ This virtual machine, provided the flexibility to scale our operations and execu
 >
 > Answer:
 
-![GCP Bucket]()
-![Data Stored to GCP bucket]()
+![GCP Bucket](https://github.com/paulobeckhauser/mlops_finances/blob/improv_report/reports/figures/GCP_buckets.png)
+![Data Stored to GCP bucket](https://github.com/paulobeckhauser/mlops_finances/blob/improv_report/reports/figures/GCP_bucket_data.png)
 
 
 
