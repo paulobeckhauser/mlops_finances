@@ -448,8 +448,8 @@ This virtual machine, provided the flexibility to scale our operations and execu
 >
 > Answer:
 
-![GCP Bucket](https://github.com/paulobeckhauser/mlops_finances/blob/improv_report/reports/figures/GCP_buckets.png)
-![Data Stored to GCP bucket](https://github.com/paulobeckhauser/mlops_finances/blob/improv_report/reports/figures/GCP_bucket_data.png)
+![GCP Bucket](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/GCP_buckets.png)
+![Data Stored to GCP bucket](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/GCP_bucket_data.png)
 
 
 
@@ -460,7 +460,10 @@ This virtual machine, provided the flexibility to scale our operations and execu
 >
 > Answer:
 
---- question 20 fill here ---
+![GCP Artifact Registry - Repositories](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Artifact%20Registry.png)
+![Docker images that were uploaded](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Docker_image_finance_project.png)
+
+The docker image 'trainer' is the one related to our project, as is possible to see in [Trainer Dockerfile](https://github.com/paulobeckhauser/mlops_finances/blob/main/dockerfiles/trainer.dockerfile)
 
 ### Question 21
 
