@@ -147,15 +147,20 @@ s242479, S243418, s244086, s225526
 > *package to do ... and ... in our project*.
 >
 > Answer:
+For our project we used TorchMetrics, which can ensure reliable monitoring and comparison
+of your model's performance, such as accuracy metric, across experiments.
 
-We use `black`, a tool that automatically formats python code to be compliant with PEP 8.
+We tried to use the third-party framework PyTorch Forecasting in our project, but couldn't 
+implement it in the correct way, since some data preprocessing is necessary. 
+So it is in the backlog list to be implemented. 
 
-Moreover, `isort` is used to automatically sort the imports, thus making the code easier to understand.
+PyTorch Forecasting helps in handling the time-series forecasting aspect of our work, 
+which involved predicting the parity price of USD/CHF combined with economic calendar data. 
+It provides powerful tools such as the Temporal Fusion Transformer (TFT) model, 
+which performs well in capturing relationships across time-varying covariates and static features.
 
-This project also uses `mypy`, which is used to statically type python code. It catches
-type-related errors before runtime, reducing unexpected crashes and bugs. `mypy` also
-improves the code readability, since the type of the parameters and output of the methods
-are explicitly written in the code.
+
+We also implemented Black, which is an open-source tool to automate the process of following the best coding practices(e.g. pep8) in the python code.
 
 ## Coding environment
 
@@ -175,25 +180,9 @@ are explicitly written in the code.
 >
 > Answer:
 
-Initially, we used `conda` for managing system-level dependencies and ensuring compatibility across different platforms.
+Initially, we used Conda for managing system-level dependencies and ensuring compatibility across different platforms, particularly for libraries requiring specific configurations, such as black for formatting. But then we also created a virtual environment using .venv to isolate project-specific Python dependencies. A member of the team also used 'uv' package manager which is built in Rust, and helps to guarantee compatibility between all the libraries versions, and has great results regarding the installation time comparing to only 'pip install...'.
 
-Then, we created a virtual environment using `venv` to isolate project-specific python dependencies.
-
-To get an exact copy of our environment:
-1. Install conda in your machine
-2. Add channel `conda-forge` and install package `conda-devenv`
-    * `conda install conda-devenv -c conda-forge`
-3. In the project folder execute `conda devenv`
-    * conda devenv
-4. Activate the conda environment
-    * `conda activate mlops-py312`
-5. Create the virtual env
-    * `virtualenv venv`
-6. Activate the virtual env
-    * `source venv/bin/activate`
-7. Install the project-specific packages
-    * `pip install -r requirements.txt`
-8. Done!
+The process would be: 1. Install python; 2. Clone the repository with 'git clone <repository-url> ; 3. Create a virtual environment with 'python -m venv .venv'; 4. Activate virtual environment with 'source .venv/bin/activate' in a linux/macOS environment; 5. Install dependencies with 'pip install -r requirements.txt'
 
 ### Question 5
 
@@ -209,21 +198,9 @@ To get an exact copy of our environment:
 >
 > Answer:
 
-From the cookiecutter template, we have filled out the `data`, `dockerfiles`, `model`, `src`, and `test` folders.
+*From the cookiecutter template, we have filled out the data, dockerfiles, models, src, and test folders. The data folder was used to organize our raw and processed datasets, ensuring a structured workflow. The dockerfiles folder allowed us to set up a reproducible environment for our project using Docker, making collaboration and deployment seamless. The models folder stored our trained models and associated metadata. The src folder contained all the source code, including preprocessing scripts, model training, and evaluation pipelines. Finally, the test folder was used to ensure our code's functionality through unit and integration tests.
 
-The `data` folder was used to organize our raw and processed datasets, ensuring a structured workflow.
-
-The `dockerfiles` folder allowed us to set up a reproducible environment for our project using Docker, making collaboration and deployment seamless.
-
-The `model` folder stored our trained models and associated metadata.
-
-The `src` folder contained all the source code, including preprocessing scripts, model training, and evaluation pipelines.
-
-Finally, the `test` folder was used to ensure our code's functionality through unit and integration tests.
-
-We debated removing the notebooks folder since we rarely used Jupyter notebooks during the project, opting for .py files for prototyping and development to maintain a consistent coding style. Additionally, we added checkpoints and logs folders.
-The checkpoints folder stored intermediate training states, which allowed us to resume training efficiently, while the logs folder contained experiment details, including training metrics and configurations, making it easier to monitor and reproduce results.
-These additions were critical for managing and tracking our experiments systematically.
+We debated removing the notebooks folder since we rarely used Jupyter notebooks during the project, opting for .py files for prototyping and development to maintain a consistent coding style. Additionally, we added checkpoints and logs folders. The checkpoints folder stored intermediate training states, which allowed us to resume training efficiently, while the logs folder contained experiment details, including training metrics and configurations, making it easier to monitor and reproduce results. These additions were critical for managing and tracking our experiments systematically.*
 
 ### Question 6
 
@@ -238,17 +215,9 @@ These additions were critical for managing and tracking our experiments systemat
 >
 > Answer:
 
-We implemented several rules to ensure code quality and consistency.
+We implemented several rules to ensure code quality and consistency. First, we adhered to the PEP 8 guidelines, which define best practices for Python code formatting, including indentation, naming conventions, and spacing. To automate this process, we used the Black library, which enforces a consistent code style by reformatting our code automatically. This helped us maintain a clean and standardized codebase, reducing potential errors caused by inconsistent formatting.
 
-First, we adhered to the PEP 8 guidelines, which define best practices for Python code formatting - this was achieved through `black`.
-
-We used docstrings to describe functions, classes, and modules, detailing their purpose, parameters, and expected behavior.
-
-This practice was good for team collaboration and onboarding, as it allowed new contributors to understand the code quickly.
-
-Since the code was statically typed, there was no need to add the types to the docstrings.
-
-Therefore, the documentation was smaller and cleaner than if static typing were not employed.
+We used docstrings to describe functions, classes, and modules, detailing their purpose, parameters, and expected behavior. This practice was good for team collaboration and onboarding, as it allowed new contributors to understand the code quickly.
 
 ## Version control
 
@@ -267,13 +236,7 @@ Therefore, the documentation was smaller and cleaner than if static typing were 
 >
 > Answer:
 
-In total, we have implemented 4 tests:
-1. verify the raw data, ensuring there are exactly two non-empty files.
-2. preprocessing, validating that the data transformations work as expected.
-3. evaluate the model, testing its initialization, forward pass, and training functionality.
-4. test the API, ensuring it handles requests and returns responses correctly.
-
-These tests cover the most critical parts of the application: data integrity, preprocessing, model performance, and API functionality.
+In total, we have implemented 4 tests. The first test verifies the raw data, ensuring there are exactly two non-empty files. The second test focuses on preprocessing, validating that the data transformations work as expected. The third test evaluates the model, testing its initialization, forward pass, and training functionality. Finally, the fourth test targets the API, ensuring it handles requests and returns responses correctly. These tests cover the most critical parts of the application: data integrity, preprocessing, model performance, and API functionality.
 
 ### Question 8
 
@@ -290,14 +253,7 @@ These tests cover the most critical parts of the application: data integrity, pr
 
 The total code coverage of our code is currently 23%, which includes all our source code. This number indicates that we are far from achieving 100% coverage, highlighting areas of the code that are not yet tested. Increasing test coverage is on our to-do list, as it is essential for improving the reliability and robustness of our application.
 
-However, even with 100% code coverage, we would not fully trust the code to be error-free.
-
-Code coverage only ensures that the lines of code are executed during testing, but it does not guarantee the correctness of the logic or handle all edge cases.
-
-Tests might miss certain scenarios, or the logic might fail under specific conditions.
-
-Therefore, while striving for high coverage is important, the quality and thoroughness of the tests,
-combined with other strategies like code reviews and performance testing, are crucial for ensuring a robust and error-free application.
+However, even with 100% code coverage, we would not fully trust the code to be error-free. Code coverage only ensures that the lines of code are executed during testing, but it does not guarantee the correctness of the logic or handle all edge cases. Tests might miss certain scenarios, or the logic might fail under specific conditions. Therefore, while striving for high coverage is important, the quality and thoroughness of the tests, combined with other strategies like code reviews and performance testing, are crucial for ensuring a robust and error-free application.
 
 ### Question 9
 
@@ -312,23 +268,11 @@ combined with other strategies like code reviews and performance testing, are cr
 >
 > Answer:
 
-We made extensive use of branches and pull requests (PRs) in our project to streamline collaboration and maintain code quality.
+* We made extensive use of branches and pull requests (PRs) in our project to streamline collaboration and maintain code quality. We implemented a rule to protect the main branch, requiring that any code merged into it be reviewed and approved by at least one other team member. This ensured that only thoroughly reviewed and tested code made its way into the main branch.
 
-We implemented a rule to protect the main branch, requiring that any code merged into it be reviewed and approved by at least one other team member.
+Each team member worked on their own branch, typically named based on the specific feature or bug fix being implemented. This approach kept individual contributions isolated, reducing the risk of conflicts and enabling parallel development. When a feature or fix was ready, the contributor merged their branch with their local main branch to verify compatibility. Afterward, they pushed the changes to a remote branch and created a pull request (PR). The PR served as a platform for discussions, comments, and code reviews.
 
-This ensured that only thoroughly reviewed and tested code made its way into the main branch.
-
-Each team member worked on their own branch, typically named based on the specific feature or bug fix being implemented.
-
-This approach kept individual contributions isolated, reducing the risk of conflicts and enabling parallel development.
-
-When a feature or fix was ready, the contributor merged their branch with their local main branch to verify compatibility.
-
-Afterward, they pushed the changes to a remote branch and created a pull request (PR). The PR served as a platform for discussions, comments, and code reviews.
-
-This workflow improved version control by providing a clear history of changes, encouraging collaboration, and minimizing the risk of introducing bugs into the main branch.
-
-It also facilitated accountability and knowledge sharing among team members, making the development process more efficient and reliable.*
+This workflow improved version control by providing a clear history of changes, encouraging collaboration, and minimizing the risk of introducing bugs into the main branch. It also facilitated accountability and knowledge sharing among team members, making the development process more efficient and reliable.*
 
 ### Question 10
 

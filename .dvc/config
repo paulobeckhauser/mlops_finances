@@ -1,0 +1,5 @@
+[core]
+    remote = remote_storage
+['remote "remote_storage"']
+    url = gs://my_mlops_data_bucket_finances/
+    version_aware = true

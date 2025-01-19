@@ -1,0 +1,39 @@
+outs:
+- hash: md5
+  path: data
+  files:
+  - relpath: processed/.gitkeep
+    md5: d41d8cd98f00b204e9800998ecf8427e
+    size: 0
+    cloud:
+      remote_storage:
+        etag: 08f3a6a5f5d0818b031001
+        version_id: '1737284452438899'
+  - relpath: processed/processed_data.csv
+    md5: 19d51bff20cedcb96bb886e1c105b223
+    size: 3702428
+    cloud:
+      remote_storage:
+        etag: 08a8affdf5d0818b031001
+        version_id: '1737284453881768'
+  - relpath: raw/.gitkeep
+    md5: d41d8cd98f00b204e9800998ecf8427e
+    size: 0
+    cloud:
+      remote_storage:
+        etag: 08c88aabf5d0818b031001
+        version_id: '1737284452533576'
+  - relpath: raw/economic_calendar.csv
+    md5: 3aea5da147757005af0d3cd08bac0fa0
+    size: 14901850
+    cloud:
+      remote_storage:
+        etag: 08caeae5f6d0818b031001
+        version_id: '1737284455593290'
+  - relpath: raw/usd_chf_prices.csv
+    md5: ae1b5a918e20b5315edfb8290a1efb48
+    size: 1277786
+    cloud:
+      remote_storage:
+        etag: 08a7a38bf5d0818b031001
+        version_id: '1737284452012455'
