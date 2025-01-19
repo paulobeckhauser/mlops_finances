@@ -9,7 +9,7 @@ RUN apt update && \
 COPY requirements.txt requirements.txt
 COPY pyproject.toml pyproject.toml
 COPY src/finance/ src/finance/
-COPY data/ data/
+# COPY data/ data/
 # Include Hydra configuration directory
 COPY configs/ configs/  
 
