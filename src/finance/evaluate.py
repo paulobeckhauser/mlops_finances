@@ -71,13 +71,16 @@ def evaluate_model(
     labels = torch.cat(all_labels)
 
     # Compute metrics
-    accuracy = accuracy_metric(preds, preds).item()
-    precision = precision_metric(preds, preds).item()
-    recall = recall_metric(preds, preds).item()
-    f1 = f1_metric(preds, preds).item()
+    accuracy = accuracy_metric(preds, labels).item()
+    precision = precision_metric(preds, labels).item()
+    recall = recall_metric(preds, labels).item()
+    f1 = f1_metric(preds, labels).item()
 
     # Print metrics
     print(f"Model Accuracy: {accuracy:.4f}")
+    print(f"Model Precision: {precision:.4f}")
+    print(f"Model Recall: {recall:.4f}")
+    print(f"Model F1: {f1:.4f}")
 
 
 if __name__ == "__main__":
