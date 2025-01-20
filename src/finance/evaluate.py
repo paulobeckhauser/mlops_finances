@@ -70,6 +70,10 @@ def evaluate_model(
     preds = torch.cat(all_preds)
     labels = torch.cat(all_labels)
 
+    print("Predictions:", preds)
+    print("Labels:", labels)
+
+
     # Compute metrics
     accuracy = accuracy_metric(preds, labels).item()
     precision = precision_metric(preds, labels).item()
