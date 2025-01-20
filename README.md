@@ -377,16 +377,14 @@ This approach guarantees that all essential details, from hyperparameters to out
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
 > **experiments/project? Include how you would run your docker images and include a link to one of your docker files.**
->
-> Recommended answer length: 100-200 words.
->
-> Example:
-> *For our project we developed several images: one for training, inference and deployment. For example to run the*
-> *training docker image: `docker run trainer:latest lr=1e-3 batch_size=64`. Link to docker file: <weblink>*
->
-> Answer:
 
---- question 15 fill here ---
+> Answer:g
+> Docker was essential in our project for containerizing the training workflow, and ensuring reproducibility. We used Docker to isolate dependencies, configurations and source code for training a deep learning model. The trainer.dockerfile was designed to build a lightweight Python container with all required packages and the project code. To build and run the Docker image, we executed the following commands:
+> 1. Build the image: docker build -t finance-trainer -f dockerfiles/trainer.dockerfile .
+> 2. Run the container: docker run finance-trainer'
+> This trains the model, evaluate its performance and saves the results
+The final output includes metrics like accuracy (0.5484) and the trained model saved at model/model.pth. This containerization ensures that anyone with Docker can reproduce the results without additional setup.
+
 
 ### Question 16
 
