@@ -400,6 +400,7 @@ This approach guarantees that all essential details, from hyperparameters to out
 > *run of our main code at some point that showed ...*
 >
 > Answer:
+> 
 When encountering bugs, our primary debugging method involved using print statements to trace variables and program flow. This simple approach helped identify unexpected values or incorrect logic. For more complex issues, we utilized the debugging tools within our integrated development environment to step through the code and inspect variables at various breakpoints. While we recognize the importance of code profiling for performance optimization, we didn't prioritize it due to time constraints and our focus on achieving functional correctness. We acknowledge that our code likely has areas for improvement in terms of efficiency, but profiling wasn't a primary focus during this stage of development.
 
 ## Working in the cloud
