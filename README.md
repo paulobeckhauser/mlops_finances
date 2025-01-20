@@ -493,6 +493,8 @@ Next, we created a custom job by defining a config.yaml file that specified the 
 
 During the setup, we encountered an issue where the Docker image was not found due to an incorrect URI, but this was resolved by ensuring proper regional alignment and precise image naming in the Artifact Registry. The job completed successfully, and the model was trained as expected.
 
+![Jobs Vertex AI](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Jobs_VertexAI.png)
+
 ## Deployment
 
 ### Question 23
