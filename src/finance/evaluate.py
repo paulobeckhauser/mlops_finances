@@ -5,8 +5,8 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 from torchmetrics.classification import Accuracy, F1Score, Precision, Recall
 
-from finance.data import get_training_data
-from finance.model import DeepLearningModel
+from data import get_training_data
+from model import DeepLearningModel
 
 
 def evaluate_model(
@@ -78,9 +78,6 @@ def evaluate_model(
 
     # Print metrics
     print(f"Model Accuracy: {accuracy:.4f}")
-    print(f"Model Precision: {precision:.4f}")
-    print(f"Model Recall: {recall:.4f}")
-    print(f"Model F1: {f1:.4f}")
 
 
 if __name__ == "__main__":
