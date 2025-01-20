@@ -487,7 +487,11 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
---- question 22 fill here ---
+We successfully trained our model in the cloud using Vertex AI. To accomplish this, we first containerized our training script (src/finance/main.py) by creating a Docker image containing all dependencies and configurations. The image was built locally using a Dockerfile and pushed to Artifact Registry in the europe-west1 region. We configured the necessary permissions by granting the Artifact Registry Reader role to the Vertex AI service account.
+
+Next, we created a custom job by defining a config.yaml file that specified the machine type, region, and container image URI. The custom job was submitted using the gcloud ai custom-jobs create command. We chose Vertex AI because it provided seamless integration with GCP services, scalability, and robust monitoring tools for training large models.
+
+During the setup, we encountered an issue where the Docker image was not found due to an incorrect URI, but this was resolved by ensuring proper regional alignment and precise image naming in the Artifact Registry. The job completed successfully, and the model was trained as expected.
 
 ## Deployment
 
