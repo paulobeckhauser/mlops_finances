@@ -6,8 +6,8 @@ import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from finance.data import get_training_data
-from finance.model import DeepLearningModel, get_loaders
+from data import get_training_data
+from model import DeepLearningModel, get_loaders
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
