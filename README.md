@@ -409,15 +409,14 @@ When encountering bugs, our primary debugging method involved using print statem
 
 > **List all the GCP services that you made use of in your project and shortly explain what each service does?**
 >
-> Recommended answer length: 50-200 words.
->
-> Example:
-> *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
->
-> Answer:
+>1. Google Cloud Compute Engine:  Used to run machine learning workflows and MLOps pipelines by deploying a virtual machine (VM) instance. The VM was configured with a standard persistent disk (10 GB storage), Debian 12 operating system, and Google-managed encryption keys for data security. This service provided the computational resources to preprocess data, train, and evaluate models securely and cost-effectively. 
+>2. Google Cloud Storage: Utilized to store raw and processed data for financial analysis. Cloud Storage ensured efficient data access and sharing during the project.
+>3. Artifact Registry: Used to store Docker container images required for machine learning tasks. Docker images, like the trainer, containing dependencies and configurations were built locally and pushed to Artifact Registry. This ensured seamless integration with Vertex AI for custom job execution.
+>4. Vertex AI: Employed to train machine learning models in the cloud. A custom job was created using a containerized training script (src/finance/main.py) hosted in Artifact Registry. The service was chosen for its scalability, integration with GCP services, and monitoring tools to train and manage large models.
+>5. Cloud Build: Used to automate the process of building and pushing Docker images to Artifact Registry. Build triggers ensured an efficient CI/CD pipeline, reducing manual intervention and ensuring the consistency of container images.
+>6. Cloud Logging: Enabled monitoring and debugging by collecting logs from Compute Engine, Vertex AI, and other resources. Logs were used to identify issues, such as incorrect Docker image URIs, and ensure smooth operations during custom job submissions.
 
-We used the following services:
-
+ 
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
