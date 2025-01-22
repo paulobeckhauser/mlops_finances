@@ -499,16 +499,12 @@ During the setup, we encountered an issue where the Docker image was not found d
 > **Did you manage to write an API for your model? If yes, explain how you did it and if you did anything special. If**
 > **not, explain how you would do it.**
 >
-> Recommended answer length: 100-200 words.
->
-> Example:
-> *We did manage to write an API for our model. We used FastAPI to do this. We did this by ... . We also added ...*
-> *to the API to make it more ...*
->
-> Answer:
+> 
+We did manage to write an API for our model using FastAPI. We created the API to serve a trained deep learning model implemented with PyTorch and used FastAPI's features to show prediction functionality through HTTP endpoints. The API loads the model architecture, restores the trained weights using torch.load, and uses the model to make predictions.
 
---- question 23 fill here ---
+To handle user inputs, the API accepts JSON data, converts it into a Pandas DataFrame for preprocessing, and then transforms it into PyTorch tensors for model inference. The /predict endpoint processes these inputs and returns both class predictions and probabilities in JSON format.
 
+Additionally, we implemented error handling to ensure clear feedback if the model weights are missing or if the input format is invalid. 
 ### Question 24
 
 > **Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and**
