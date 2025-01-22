@@ -15,7 +15,7 @@ COPY src/finance/ ./src/finance/
 COPY model/ ./model/  
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --default-timeout=700 --no-cache-dir -r requirements.txt
 RUN pip install uvicorn --no-cache-dir  # Ensure uvicorn is installed
 
 # Expose the port for FastAPI
