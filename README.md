@@ -510,16 +510,16 @@ Additionally, we implemented error handling to ensure clear feedback if the mode
 > **Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and**
 > **preferably how you invoke your deployed service?**
 >
-> Recommended answer length: 100-200 words.
->
-> Example:
-> *For deployment we wrapped our model into application using ... . We first tried locally serving the model, which*
-> *worked. Afterwards we deployed it in the cloud, using ... . To invoke the service an user would call*
-> *`curl -X POST -F "file=@file.json"<weburl>`*
->
-> Answer:
+> Yes, we managed to deploy our API locally using FastAPI and Docker. To achieve this, we first built the FastAPI application to serve a trained PyTorch model. The API loads the model architecture and weights, sets the model to evaluation mode, and handles predictions.
 
---- question 24 fill here ---
+We then containerized the application using a Dockerfile, ensuring that all dependencies, including the trained model, were installed in the container. The Docker image was built with the following command:
+- docker build -t my_model_api -f dockerfiles/api.dockerfile .
+
+After building the image, we ran the container locally, exposing the API on port 8000:
+docker run -d -p 8000:8000 my_model_api
+The deployed API can be invoked through the /predict endpoint by sending a POST request with JSON data. For example, using curl:
+curl -X POST "http://localhost:8000/predict/" -H "Content-Type: application/json" -d '{"feature1": 1.0, "feature2": 0.5}'
+This returns predictions and probabilities in JSON format. The deployment was successful, and the API could be accessed at http://localhost:8000.
 
 ### Question 25
 
