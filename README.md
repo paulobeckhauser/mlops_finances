@@ -516,7 +516,7 @@ We then containerized the application using a Dockerfile, ensuring that all depe
 - docker build -t my_model_api -f dockerfiles/api.dockerfile .
 
 After building the image, we ran the container locally, exposing the API on port 8000:
-docker run -d -p 8000:8000 my_model_api
+- docker run -d -p 8000:8000 my_model_api
 The deployed API can be invoked through the /predict endpoint by sending a POST request with JSON data. For example, using curl:
 curl -X POST "http://localhost:8000/predict/" -H "Content-Type: application/json" -d '{"feature1": 1.0, "feature2": 0.5}'
 This returns predictions and probabilities in JSON format. The deployment was successful, and the API could be accessed at http://localhost:8000.
