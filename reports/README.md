@@ -553,9 +553,8 @@ The deployed API can be invoked through the /predict endpoint by sending a POST 
 >
 > Answer:
 
-```markdown
 ![Project Diagram](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Project_diagram.jpg)
-```
+
 The project utilizes Git for version control and Docker for managing system-level dependencies. A virtual environment, .venv, is employed for Python dependencies, along with the requirements.txt file for pip installations. The uv package manager enhances library compatibility. The project follows a structured codebase using a Cookiecutter template, featuring directories for data, Dockerfiles, models, src, and tests, with additional directories for checkpoints and logs.
 
 To maintain code quality, Black enforces PEP 8 formatting, and docstrings provide documentation. Four unit tests cover data verification, preprocessing, model evaluation, and API functionality, achieving 23% code coverage.
@@ -584,7 +583,13 @@ The project leverages Google Cloud Platform (GCP) for key services. A VM instanc
 >
 > Answer:
 
---- question 30 fill here ---
+--- The biggest challenge in the project was understanding the infrastructure and effectively utilizing Google Cloud Platform (GCP). As we relied entirely on GCP, there was a steep learning curve in grasping its various tools, services, and configurations. Setting up the environment, managing permissions, and optimizing workflows required significant effort and time.
+
+Another major struggle was working with Docker. While it offered a way to standardize our deployments, we faced performance issues as the containers often took too long to build and run. Debugging and optimizing the containerization process became an unexpected time sink, particularly when combined with API integration challenges. Using the correct ports for API access proved tricky, requiring several iterations and troubleshooting to ensure seamless communication between components.
+
+Building the model itself also posed significant difficulties, as we were working with time series data. Designing a model capable of accurately capturing the patterns and nuances of time-dependent data demanded careful consideration of feature engineering, hyperparameter tuning, and architecture selection. Despite our efforts, we believe the model is underperforming, likely due to challenges in balancing complexity and overfitting while working with a relatively volatile dataset.
+
+To address these challenges, we dedicated time to learning GCP's documentation and tutorials, sought community support for Docker optimizations, and conducted multiple tests to refine our API configurations. On the modeling side, we iteratively tested different approaches and are now focusing on further fine-tuning and exploring advanced methods to improve performance. Despite the hurdles, these experiences have provided valuable learning opportunities for future projects. ---
 
 ### Question 31
 
