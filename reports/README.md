@@ -308,7 +308,11 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 15 fill here ---
+Docker was essential in our project for containerizing the training workflow, and ensuring reproducibility. We used Docker to isolate dependencies, configurations and source code for training a deep learning model. The trainer.dockerfile was designed to build a lightweight Python container with all required packages and the project code. To build and run the Docker image, we executed the following commands:
+> 1. Build the image: docker build -t finance-trainer -f dockerfiles/trainer.dockerfile .
+> 2. Run the container: docker run finance-trainer'
+> This trains the model, evaluate its performance and saves the results
+The final output includes metrics like accuracy (0.5484) and the trained model saved at model/model.pth. This containerization ensures that anyone with Docker can reproduce the results without additional setup.
 
 ### Question 16
 
@@ -323,7 +327,7 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 16 fill here ---
+When encountering bugs, our primary debugging method involved using print statements to trace variables and program flow. This simple approach helped identify unexpected values or incorrect logic. For more complex issues, we utilized the debugging tools within our integrated development environment to step through the code and inspect variables at various breakpoints. While we recognize the importance of code profiling for performance optimization, we didn't prioritize it due to time constraints and our focus on achieving functional correctness. We acknowledge that our code likely has areas for improvement in terms of efficiency, but profiling wasn't a primary focus during this stage of development.
 
 ## Working in the cloud
 
@@ -341,6 +345,12 @@ This approach guarantees that all essential details, from hyperparameters to out
 > Answer:
 
 We used the following services:
+1. Google Cloud Compute Engine:  Used to run machine learning workflows and MLOps pipelines by deploying a virtual machine (VM) instance. The VM was configured with a standard persistent disk (10 GB storage), Debian 12 operating system, and Google-managed encryption keys for data security. This service provided the computational resources to preprocess data, train, and evaluate models securely and cost-effectively. 
+>2. Google Cloud Storage: Utilized to store raw and processed data for financial analysis. Cloud Storage ensured efficient data access and sharing during the project.
+>3. Artifact Registry: Used to store Docker container images required for machine learning tasks. Docker images, like the trainer, containing dependencies and configurations were built locally and pushed to Artifact Registry. This ensured seamless integration with Vertex AI for custom job execution.
+>4. Vertex AI: Employed to train machine learning models in the cloud. A custom job was created using a containerized training script (src/finance/main.py) hosted in Artifact Registry. The service was chosen for its scalability, integration with GCP services, and monitoring tools to train and manage large models.
+>5. Cloud Build: Used to automate the process of building and pushing Docker images to Artifact Registry. Build triggers ensured an efficient CI/CD pipeline, reducing manual intervention and ensuring the consistency of container images.
+>6. Cloud Logging: Enabled monitoring and debugging by collecting logs from Compute Engine, Vertex AI, and other resources. Logs were used to identify issues, such as incorrect Docker image URIs, and ensure smooth operations during custom job submissions.
 
 ### Question 18
 
@@ -409,7 +419,13 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
---- question 22 fill here ---
+We successfully trained our model in the cloud using Vertex AI. To accomplish this, we first containerized our training script (src/finance/main.py) by creating a Docker image containing all dependencies and configurations. The image was built locally using a Dockerfile and pushed to Artifact Registry in the europe-west1 region. We configured the necessary permissions by granting the Artifact Registry Reader role to the Vertex AI service account.
+
+Next, we created a custom job by defining a config.yaml file that specified the machine type, region, and container image URI. The custom job was submitted using the gcloud ai custom-jobs create command. We chose Vertex AI because it provided seamless integration with GCP services, scalability, and robust monitoring tools for training large models.
+
+During the setup, we encountered an issue where the Docker image was not found due to an incorrect URI, but this was resolved by ensuring proper regional alignment and precise image naming in the Artifact Registry. The job completed successfully, and the model was trained as expected.
+
+![Jobs Vertex AI](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Jobs_VertexAI.png)
 
 ## Deployment
 
@@ -426,7 +442,11 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
---- question 23 fill here ---
+We did manage to write an API for our model using FastAPI. We created the API to serve a trained deep learning model implemented with PyTorch and used FastAPI's features to show prediction functionality through HTTP endpoints. The API loads the model architecture, restores the trained weights using torch.load, and uses the model to make predictions.
+
+To handle user inputs, the API accepts JSON data, converts it into a Pandas DataFrame for preprocessing, and then transforms it into PyTorch tensors for model inference. The /predict endpoint processes these inputs and returns both class predictions and probabilities in JSON format.
+
+Additionally, we implemented error handling to ensure clear feedback if the model weights are missing or if the input format is invalid. 
 
 ### Question 24
 
@@ -442,7 +462,16 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
---- question 24 fill here ---
+Yes, we managed to deploy our API locally using FastAPI and Docker. To achieve this, we first built the FastAPI application to serve a trained PyTorch model. The API loads the model architecture and weights, sets the model to evaluation mode, and handles predictions.
+We then containerized the application using a Dockerfile, ensuring that all dependencies, including the trained model, were installed in the container. The Docker image was built with the following command:
+- docker build -t my_model_api -f dockerfiles/api.dockerfile .
+
+After building the image, we ran the container locally, exposing the API on port 8000:
+- docker run -d -p 8000:8000 my_model_api
+The deployed API can be invoked through the /predict endpoint by sending a POST request with JSON data. For example, using curl:
+- curl -X POST "http://localhost:8000/predict/" -H "Content-Type: application/json" -d '{"feature1": 1.0, "feature2": 0.5}'
+  
+> This returns predictions and probabilities in JSON format. The deployment was successful, and the API could be accessed at http://localhost:8000.
 
 ### Question 25
 
@@ -457,7 +486,7 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
---- question 25 fill here ---
+
 
 ### Question 26
 
