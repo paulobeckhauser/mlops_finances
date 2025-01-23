@@ -1,83 +1,3 @@
-# USD/CHF Price Prediction Using Economic Calendar Data
-
-This project focuses on predicting the parity price of the USD/CHF currency pair by integrating historical price data with insights from economic calendar events. The goal is to build a forecasting model that enhance prediction accuracy and provide actionable insights into market trends.
-
-
-
-## Overall project checklist
-
-The checklist is *exhaustive* which means that it includes everything that you could do on the project included in the
-curriculum in this course. Therefore, we do not expect at all that you have checked all boxes at the end of the project.
-The parenthesis at the end indicates what module the bullet point is related to. Please be honest in your answers, we
-will check the repositories and the code to verify your answers.
-
-### Week 1
-
-* [✅] Create a git repository (M5)
-* [✅] Make sure that all team members have write access to the GitHub repository (M5)
-* [✅] Create a dedicated environment for you project to keep track of your packages (M2)
-* [✅] Create the initial file structure using cookiecutter with an appropriate template (M6)
-* [✅] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
-* [✅] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
-* [✅] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
-    are using (M2+M6)
-* [✅] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
-* [✅] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [✅] Setup version control for your data or part of your data (M8)
-* [ ] Add command line interfaces and project commands to your code where it makes sense (M9)
-* [✅] Construct one or multiple docker files for your code (M10)
-* [✅] Build the docker files locally and make sure they work as intended (M10)
-* [✅] Write one or multiple configurations files for your experiments (M11)
-* [✅] Used Hydra to load the configurations and manage your hyperparameters (M11)
-* [] Use profiling to optimize your code (M12)
-* [ ] Use logging to log important events in your code (M14)
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
-* [ ] Consider running a hyperparameter optimization sweep (M14)
-* [✅] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
-
-### Week 2
-
-* [✅] Write unit tests related to the data part of your code (M16)
-* [] Write unit tests related to model construction and or model training (M16)
-* [✅] Calculate the code coverage (M16)
-* [✅] Get some continuous integration running on the GitHub repository (M17)
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
-* [ ] Add a linting step to your continuous integration (M17)
-* [ ] Add pre-commit hooks to your version control setup (M18)
-* [ ] Add a continues workflow that triggers when data changes (M19)
-* [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
-* [ ] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
-* [ ] Create a trigger workflow for automatically building your docker images (M21)
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21)
-* [ ] Create a FastAPI application that can do inference using your model (M22)
-* [ ] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [ ] Write API tests for your application and setup continues integration for these (M24)
-* [ ] Load test your application (M24)
-* [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
-* [ ] Create a frontend for your API (M26)
-
-### Week 3
-
-* [ ] Check how robust your model is towards data drifting (M27)
-* [ ] Deploy to the cloud a drift detection API (M27)
-* [ ] Instrument your API with a couple of system metrics (M28)
-* [ ] Setup cloud monitoring of your instrumented application (M28)
-* [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
-* [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
-* [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
-* [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
-
-### Extra
-
-* [ ] Write some documentation for your application (M32)
-* [ ] Publish the documentation to GitHub Pages (M32)
-* [ ] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Create an architectural diagram over your MLOps pipeline
-* [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
-
-<<<<<<< HEAD
-=======
 # Exam template for 02476 Machine Learning Operations
 
 This is the report template for the exam. Please only remove the text formatted as with three dashes in front and behind
@@ -379,14 +299,16 @@ This approach guarantees that all essential details, from hyperparameters to out
 
 > **Docker is an important tool for creating containerized applications. Explain how you used docker in your**
 > **experiments/project? Include how you would run your docker images and include a link to one of your docker files.**
+>
+> Recommended answer length: 100-200 words.
+>
+> Example:
+> *For our project we developed several images: one for training, inference and deployment. For example to run the*
+> *training docker image: `docker run trainer:latest lr=1e-3 batch_size=64`. Link to docker file: <weblink>*
+>
+> Answer:
 
-> Answer:g
-> Docker was essential in our project for containerizing the training workflow, and ensuring reproducibility. We used Docker to isolate dependencies, configurations and source code for training a deep learning model. The trainer.dockerfile was designed to build a lightweight Python container with all required packages and the project code. To build and run the Docker image, we executed the following commands:
-> 1. Build the image: docker build -t finance-trainer -f dockerfiles/trainer.dockerfile .
-> 2. Run the container: docker run finance-trainer'
-> This trains the model, evaluate its performance and saves the results
-The final output includes metrics like accuracy (0.5484) and the trained model saved at model/model.pth. This containerization ensures that anyone with Docker can reproduce the results without additional setup.
-
+--- question 15 fill here ---
 
 ### Question 16
 
@@ -400,8 +322,8 @@ The final output includes metrics like accuracy (0.5484) and the trained model s
 > *run of our main code at some point that showed ...*
 >
 > Answer:
-> 
-When encountering bugs, our primary debugging method involved using print statements to trace variables and program flow. This simple approach helped identify unexpected values or incorrect logic. For more complex issues, we utilized the debugging tools within our integrated development environment to step through the code and inspect variables at various breakpoints. While we recognize the importance of code profiling for performance optimization, we didn't prioritize it due to time constraints and our focus on achieving functional correctness. We acknowledge that our code likely has areas for improvement in terms of efficiency, but profiling wasn't a primary focus during this stage of development.
+
+--- question 16 fill here ---
 
 ## Working in the cloud
 
@@ -411,14 +333,15 @@ When encountering bugs, our primary debugging method involved using print statem
 
 > **List all the GCP services that you made use of in your project and shortly explain what each service does?**
 >
->1. Google Cloud Compute Engine:  Used to run machine learning workflows and MLOps pipelines by deploying a virtual machine (VM) instance. The VM was configured with a standard persistent disk (10 GB storage), Debian 12 operating system, and Google-managed encryption keys for data security. This service provided the computational resources to preprocess data, train, and evaluate models securely and cost-effectively. 
->2. Google Cloud Storage: Utilized to store raw and processed data for financial analysis. Cloud Storage ensured efficient data access and sharing during the project.
->3. Artifact Registry: Used to store Docker container images required for machine learning tasks. Docker images, like the trainer, containing dependencies and configurations were built locally and pushed to Artifact Registry. This ensured seamless integration with Vertex AI for custom job execution.
->4. Vertex AI: Employed to train machine learning models in the cloud. A custom job was created using a containerized training script (src/finance/main.py) hosted in Artifact Registry. The service was chosen for its scalability, integration with GCP services, and monitoring tools to train and manage large models.
->5. Cloud Build: Used to automate the process of building and pushing Docker images to Artifact Registry. Build triggers ensured an efficient CI/CD pipeline, reducing manual intervention and ensuring the consistency of container images.
->6. Cloud Logging: Enabled monitoring and debugging by collecting logs from Compute Engine, Vertex AI, and other resources. Logs were used to identify issues, such as incorrect Docker image URIs, and ensure smooth operations during custom job submissions.
+> Recommended answer length: 50-200 words.
+>
+> Example:
+> *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
+>
+> Answer:
 
- 
+We used the following services:
+
 ### Question 18
 
 > **The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs**
@@ -486,13 +409,7 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 >
 > Answer:
 
-We successfully trained our model in the cloud using Vertex AI. To accomplish this, we first containerized our training script (src/finance/main.py) by creating a Docker image containing all dependencies and configurations. The image was built locally using a Dockerfile and pushed to Artifact Registry in the europe-west1 region. We configured the necessary permissions by granting the Artifact Registry Reader role to the Vertex AI service account.
-
-Next, we created a custom job by defining a config.yaml file that specified the machine type, region, and container image URI. The custom job was submitted using the gcloud ai custom-jobs create command. We chose Vertex AI because it provided seamless integration with GCP services, scalability, and robust monitoring tools for training large models.
-
-During the setup, we encountered an issue where the Docker image was not found due to an incorrect URI, but this was resolved by ensuring proper regional alignment and precise image naming in the Artifact Registry. The job completed successfully, and the model was trained as expected.
-
-![Jobs Vertex AI](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Jobs_VertexAI.png)
+--- question 22 fill here ---
 
 ## Deployment
 
@@ -501,29 +418,31 @@ During the setup, we encountered an issue where the Docker image was not found d
 > **Did you manage to write an API for your model? If yes, explain how you did it and if you did anything special. If**
 > **not, explain how you would do it.**
 >
-> 
-We did manage to write an API for our model using FastAPI. We created the API to serve a trained deep learning model implemented with PyTorch and used FastAPI's features to show prediction functionality through HTTP endpoints. The API loads the model architecture, restores the trained weights using torch.load, and uses the model to make predictions.
+> Recommended answer length: 100-200 words.
+>
+> Example:
+> *We did manage to write an API for our model. We used FastAPI to do this. We did this by ... . We also added ...*
+> *to the API to make it more ...*
+>
+> Answer:
 
-To handle user inputs, the API accepts JSON data, converts it into a Pandas DataFrame for preprocessing, and then transforms it into PyTorch tensors for model inference. The /predict endpoint processes these inputs and returns both class predictions and probabilities in JSON format.
+--- question 23 fill here ---
 
-Additionally, we implemented error handling to ensure clear feedback if the model weights are missing or if the input format is invalid. 
 ### Question 24
 
 > **Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and**
 > **preferably how you invoke your deployed service?**
 >
-> Yes, we managed to deploy our API locally using FastAPI and Docker. To achieve this, we first built the FastAPI application to serve a trained PyTorch model. The API loads the model architecture and weights, sets the model to evaluation mode, and handles predictions.
+> Recommended answer length: 100-200 words.
+>
+> Example:
+> *For deployment we wrapped our model into application using ... . We first tried locally serving the model, which*
+> *worked. Afterwards we deployed it in the cloud, using ... . To invoke the service an user would call*
+> *`curl -X POST -F "file=@file.json"<weburl>`*
+>
+> Answer:
 
-We then containerized the application using a Dockerfile, ensuring that all dependencies, including the trained model, were installed in the container. The Docker image was built with the following command:
-- docker build -t my_model_api -f dockerfiles/api.dockerfile .
-
-After building the image, we ran the container locally, exposing the API on port 8000:
-- docker run -d -p 8000:8000 my_model_api
-  
->The deployed API can be invoked through the /predict endpoint by sending a POST request with JSON data. For example, using curl:
-- curl -X POST "http://localhost:8000/predict/" -H "Content-Type: application/json" -d '{"feature1": 1.0, "feature2": 0.5}'
-  
->This returns predictions and probabilities in JSON format. The deployment was successful, and the API could be accessed at http://localhost:8000.
+--- question 24 fill here ---
 
 ### Question 25
 
@@ -637,68 +556,3 @@ After building the image, we ran the container locally, exposing the API on port
 > Answer:
 
 --- question 31 fill here ---
-
->>>>>>> origin
-# Setup
-
-Install `conda` in your machine, then
-```
-conda install conda-devenv -c conda-forge
-```
-
-Install this project environment
-```
-conda devenv
-```
-
-## Project structure
-
-The directory structure of the project looks like this:
-```txt
-├── .github/                  # Github actions and dependabot
-│   ├── dependabot.yaml
-│   └── workflows/
-│       └── tests.yaml
-├── configs/                  # Configuration files
-├── data/                     # Data directory
-│   ├── processed
-│   └── raw
-├── dockerfiles/              # Dockerfiles
-│   ├── api.Dockerfile
-│   └── train.Dockerfile
-├── docs/                     # Documentation
-│   ├── mkdocs.yml
-│   └── source/
-│       └── index.md
-├── models/                   # Trained models
-├── notebooks/                # Jupyter notebooks
-├── reports/                  # Reports
-│   └── figures/
-├── src/                      # Source code
-│   ├── project_name/
-│   │   ├── __init__.py
-│   │   ├── api.py
-│   │   ├── data.py
-│   │   ├── evaluate.py
-│   │   ├── models.py
-│   │   ├── train.py
-│   │   └── visualize.py
-└── tests/                    # Tests
-│   ├── __init__.py
-│   ├── test_api.py
-│   ├── test_data.py
-│   └── test_model.py
-├── .gitignore
-├── .pre-commit-config.yaml
-├── LICENSE
-├── pyproject.toml            # Python project file
-├── README.md                 # Project README
-├── requirements.txt          # Project requirements
-├── requirements_dev.txt      # Development requirements
-└── tasks.py                  # Project tasks
-```
-
-
-Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
-a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
-started with Machine Learning Operations (MLOps).
