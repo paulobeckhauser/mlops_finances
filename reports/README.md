@@ -553,7 +553,21 @@ The deployed API can be invoked through the /predict endpoint by sending a POST 
 >
 > Answer:
 
---- question 29 fill here ---
+The project utilizes Git for version control and Docker for managing system-level dependencies. A virtual environment, .venv, is employed for Python dependencies, along with the requirements.txt file for pip installations. The uv package manager enhances library compatibility. The project follows a structured codebase using a Cookiecutter template, featuring directories for data, Dockerfiles, models, src, and tests, with additional directories for checkpoints and logs.
+
+To maintain code quality, Black enforces PEP 8 formatting, and docstrings provide documentation. Four unit tests cover data verification, preprocessing, model evaluation, and API functionality, achieving 23% code coverage.
+
+Continuous Integration (CI)
+CI workflows on GitHub Actions include unit testing with pytest and linting with flake8. Tests run across multiple operating systems (Ubuntu, macOS, Windows) and Python versions (3.8–3.11). GitHub's actions/cache speeds up dependency installation.
+
+Experiment Tracking and Configuration
+Hydra manages experiment configurations using YAML files, organizing outputs into timestamped directories for reproducibility. Weights & Biases (W&B) tracks metrics, including loss graphs and hyperparameter sweeps, for improved experiment management.
+
+Containerization
+Docker is used for containerizing workflows. The trainer.dockerfile creates a lightweight Python image for training, while api.dockerfile packages the API application. Docker commands streamline image creation and deployment.
+
+Cloud Services
+The project leverages Google Cloud Platform (GCP) for key services. A VM instance on Google Compute Engine runs workflows, while Google Cloud Storage manages raw and processed data. Artifact Registry stores Docker images, and Vertex AI facilitates cloud-based model training with containerized scripts. Cloud Build automates Docker image creation, and Cloud Logging provides monitoring and debugging tools.
 
 ### Question 30
 
