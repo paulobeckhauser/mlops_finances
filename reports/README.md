@@ -554,7 +554,7 @@ The deployed API can be invoked through the /predict endpoint by sending a POST 
 > Answer:
 
 ```markdown
-![my_image](figures/Project_diagram.jpg)
+![Project Diagram](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Project_diagram.jpg)
 ```
 The project utilizes Git for version control and Docker for managing system-level dependencies. A virtual environment, .venv, is employed for Python dependencies, along with the requirements.txt file for pip installations. The uv package manager enhances library compatibility. The project follows a structured codebase using a Cookiecutter template, featuring directories for data, Dockerfiles, models, src, and tests, with additional directories for checkpoints and logs.
 
