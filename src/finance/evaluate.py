@@ -1,13 +1,10 @@
 # mypy: disallow-untyped-defs
 from pathlib import Path
-
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from torchmetrics.classification import Accuracy, F1Score, Precision, Recall
-
 from data import get_training_data
 from model import DeepLearningModel
-
 
 def evaluate_model(
     checkpoint_path: Path, preprocessed_file: Path, **kwargs: int
@@ -69,6 +66,10 @@ def evaluate_model(
     # Concatenate all predictions and labels
     preds = torch.cat(all_preds)
     labels = torch.cat(all_labels)
+
+    print("Predictions:", preds)
+    print("Labels:", labels)
+
 
     # Compute metrics
     accuracy = accuracy_metric(preds, labels).item()

@@ -1,10 +1,4 @@
 # mypy: disallow-untyped-defs
-from typing import Any
-
-import pandas as pd
-import pytorch_lightning as pl
-import torch
-import torch.nn as nn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 import torch.nn as nn
@@ -12,6 +6,12 @@ import torch
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader, TensorDataset
 from typing import Tuple
+import pandas as pd
+from typing import Any, Tuple
+import torch
+import torch.nn as nn
+import pytorch_lightning as pl
+from torch.utils.data import DataLoader, TensorDataset
 import pandas as pd
 
 def get_model(model_name: str, **kwargs: int) -> Any:
@@ -37,12 +37,9 @@ def get_model(model_name: str, **kwargs: int) -> Any:
             random_state=kwargs.get("random_state", 42),
         )
     elif model_name == "deep_learning":
-        # Custom Deep Learning model
         input_size = kwargs.get("input_size")
         if input_size is None:
-            raise ValueError(
-                "For deep learning models, 'input_size' must be specified."
-            )
+            raise ValueError("For deep learning models, 'input_size' must be specified.")
         return DeepLearningModel(
             input_size=input_size, num_classes=kwargs.get("num_classes", 2)
         )
@@ -58,18 +55,7 @@ def get_loaders(
 ) -> Tuple[DataLoader, DataLoader]:
     """
     Create DataLoaders for training and validation datasets.
-
-    Args:
-        X_train (pd.DataFrame): Features for training data.
-        X_test (pd.DataFrame): Features for validation data.
-        y_train (pd.Series): Labels for training data.
-        y_test (pd.Series): Labels for validation data.
-        batch_size (int): Batch size for the DataLoaders. Default is 32.
-
-    Returns:
-        Tuple[DataLoader, DataLoader]: Training and validation DataLoaders.
     """
-    # Convert data to PyTorch tensors
     train_dataset = TensorDataset(
         torch.tensor(X_train.values, dtype=torch.float32),
         torch.tensor(y_train.values, dtype=torch.long),
@@ -79,7 +65,6 @@ def get_loaders(
         torch.tensor(y_test.values, dtype=torch.long),
     )
 
-    # Create DataLoaders
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size)
 
@@ -87,50 +72,61 @@ def get_loaders(
 
 class DeepLearningModel(pl.LightningModule):
     """
-    PyTorch Lightning model for classification.
+    Custom Deep Learning model using PyTorch Lightning.
     """
 
     def __init__(self, input_size: int, num_classes: int, lr: float = 0.001) -> None:
         super(DeepLearningModel, self).__init__()
-        self.save_hyperparameters()  # Save hyperparameters for easy access
+        self.save_hyperparameters()
         self.fc1 = nn.Linear(input_size, 128)
         self.fc2 = nn.Linear(128, 64)
         self.fc3 = nn.Linear(64, num_classes)
         self.relu = nn.ReLU()
         self.lr = lr
 
-        # Define a softmax for evaluation purposes
-        self.softmax = nn.Softmax(dim=1)
-
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass through the network.
+        """
         x = self.relu(self.fc1(x))
         x = self.relu(self.fc2(x))
-        x = self.fc3(x)  # Output logits (raw predictions)
+        x = self.fc3(x)  # Output logits
         return x
 
-    # def training_step(self, batch, batch_idx):
-    def training_step(
-        self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int
-    ) -> torch.Tensor:
+    def training_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> torch.Tensor:
+        """
+        Training step.
+        """
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("train_loss", loss)
         return loss
 
-    def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
+    def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:
+        """
+        Validation step.
+        """
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("val_loss", loss)
         return loss
 
-    def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:  # type: ignore [override]
+    def test_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> float:
+        """
+        Test step.
+        """
         X_batch, y_batch = batch
         y_pred = self(X_batch)
         loss = nn.CrossEntropyLoss()(y_pred, y_batch)
         self.log("test_loss", loss)
         return loss
 
-    def configure_optimizers(self) -> torch.optim.Adam:
+    def configure_optimizers(self) -> torch.optim.Optimizer:
+        """
+        Configure the optimizer.
+        """
         return torch.optim.Adam(self.parameters(), lr=self.lr)
+
+
