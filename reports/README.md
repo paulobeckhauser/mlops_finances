@@ -606,4 +606,10 @@ To address these challenges, we dedicated time to learning GCP's documentation a
 >
 > Answer:
 
---- question 31 fill here ---
+Student s242779 was responsible for setting up the initial project infrastructure on Google Cloud Platform (GCP). This included configuring the cloud environment, managing permissions, and optimizing workflows. They also worked on troubleshooting API port configurations to ensure smooth communication between components.
+
+Student S243418 led the development and optimization of Docker containers, ensuring standardized and functional environments for the project. They addressed performance issues with container execution and refined the containerization process to minimize delays.
+
+Student s225526 focused on developing and training the time series model. This involved preprocessing the data, feature engineering, and iteratively tuning the model. They also analyzed the model's underperformance to identify areas for improvement. Also implemented Hydra.
+
+Student s244086 was in charge of maintaining code quality and ensuring compliance with PEP8 standards. They performed regular code reviews, refactored sections for better readability, and implemented automated linting tools to maintain a consistent coding style across the project. Also implemented DVC.
