@@ -190,11 +190,11 @@ However, even with 100% code coverage, we would not fully trust the code to be e
 >
 > Answer:
 
-* We made extensive use of branches and pull requests (PRs) in our project to streamline collaboration and maintain code quality. We implemented a rule to protect the main branch, requiring that any code merged into it be reviewed and approved by at least one other team member. This ensured that only thoroughly reviewed and tested code made its way into the main branch.
+We made extensive use of branches and pull requests (PRs) in our project to streamline collaboration and maintain code quality. We implemented a rule to protect the main branch, requiring that any code merged into it be reviewed and approved by at least one other team member. This ensured that only thoroughly reviewed and tested code made its way into the main branch.
 
 Each team member worked on their own branch, typically named based on the specific feature or bug fix being implemented. This approach kept individual contributions isolated, reducing the risk of conflicts and enabling parallel development. When a feature or fix was ready, the contributor merged their branch with their local main branch to verify compatibility. Afterward, they pushed the changes to a remote branch and created a pull request (PR). The PR served as a platform for discussions, comments, and code reviews.
 
-This workflow improved version control by providing a clear history of changes, encouraging collaboration, and minimizing the risk of introducing bugs into the main branch. It also facilitated accountability and knowledge sharing among team members, making the development process more efficient and reliable.*
+This workflow improved version control by providing a clear history of changes, encouraging collaboration, and minimizing the risk of introducing bugs into the main branch. It also facilitated accountability and knowledge sharing among team members, making the development process more efficient and reliable.
 
 ### Question 10
 
@@ -230,13 +230,13 @@ In large-scale projects, reproducibility is a critical factor. DVC stores metada
 >
 > Answer:
 
-*We have organized our continuous integration (CI) setup into two separate workflows to ensure a modular and efficient pipeline. Each workflow targets a specific task: one for unit testing, one for linting, and one for deployment. This separation of concerns improves maintainability and scalability as our project grows.
+We have organized our continuous integration (CI) setup into two separate workflows to ensure a modular and efficient pipeline. Each workflow targets a specific task: one for unit testing, one for linting, and one for deployment. This separation of concerns improves maintainability and scalability as our project grows.
 
 For unit testing, we use pytest to validate our code functionality across multiple operating systems (Ubuntu, macOS, Windows) and Python versions (3.8 to 3.11). This ensures compatibility and robustness in diverse environments. We also implement caching for Python dependencies using GitHub’s actions/cache, which significantly reduces workflow execution time by avoiding redundant installations.
 
 In our linting workflow, we use flake8 to enforce code style and maintain high readability and quality. This step helps catch potential issues early in the development cycle, reducing technical debt over time. This also showed a lot of improvements were needed in our code.
 
-By leveraging caching, running workflows on multiple platforms, and testing against different Python versions, we have created a robust CI pipeline that ensures our code is reliable and production-ready. An example of one of our workflows can be found <[here](https://github.com/paulobeckhauser/mlops_finances/actions/runs/12845256661)>. This setup provides a strong foundation for continuous improvement and rapid iteration in our development process.*
+By leveraging caching, running workflows on multiple platforms, and testing against different Python versions, we have created a robust CI pipeline that ensures our code is reliable and production-ready. An example of one of our workflows can be found <[here](https://github.com/paulobeckhauser/mlops_finances/actions/runs/12845256661)>. This setup provides a strong foundation for continuous improvement and rapid iteration in our development process.
 
 ## Running code and tracking experiments
 
@@ -255,7 +255,7 @@ By leveraging caching, running workflows on multiple platforms, and testing agai
 >
 > Answer:
 
-*We configured our experiments using Hydra, a powerful library for managing configuration files and command-line arguments. Hydra allows us to structure experiments through YAML-based config files and override parameters dynamically from the command line. We defined our configuration in the files 'config.yaml' and 'deep_learning.yaml' in the folder 'configs'. In order to be able to run an experiment in our project, just need to run the following code, for example: 'python src/finance/main.py model.epochs=30 model.lr=0.001'*
+We configured our experiments using Hydra, a powerful library for managing configuration files and command-line arguments. Hydra allows us to structure experiments through YAML-based config files and override parameters dynamically from the command line. We defined our configuration in the files 'config.yaml' and 'deep_learning.yaml' in the folder 'configs'. In order to be able to run an experiment in our project, just need to run the following code, for example: 'python src/finance/main.py model.epochs=30 model.lr=0.001'
 
 ### Question 13
 
