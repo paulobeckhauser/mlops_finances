@@ -9,6 +9,8 @@ from omegaconf import DictConfig, OmegaConf
 from evaluate import evaluate_model
 from data import preprocess, download_from_public_url
 from train import train_model
+from visualize import log_custom_metrics, plot_loss
+
 
 # Redirect stdout to the logger
 logging.basicConfig(level=logging.INFO)
@@ -57,25 +59,24 @@ def main(cfg: DictConfig) -> None:
 
     # Train the model
     print(f"Training {cfg.model_name} model...")
-    model = train_model(
-        cfg.model_name,  # Positional argument
-        preprocessed_file,
-        **cfg.model,  # Unpack model-specific parameters only
-    )
+    model, checkpoint_path = train_model(
+    cfg.model_name,  # Positional argument
+    preprocessed_file,
+    **cfg.model,  # Unpack model-specific parameters only
+)
 
     # Save the trained model
     # checkpoint_path = Path("")
 
     # Evaluate the model
     print(f"Evaluating {cfg.model_name} model...")
-    # Evaluate the model
     evaluate_model(
-        checkpoint_path=checkpoint_path,
-        preprocessed_file=preprocessed_file,
-        batch_size=32,
-        task="binary",  # Specify task type: "binary" or "multiclass"
-        num_classes=2,  # Specify number of classes
-    )
+    checkpoint_path=Path(checkpoint_path),  # Use the actual best checkpoint path
+    preprocessed_file=preprocessed_file,
+    batch_size=32,
+    task="binary",  # Specify task type: "binary" or "multiclass"
+    num_classes=2,  # Specify number of classes
+)
 
 
 if __name__ == "__main__":

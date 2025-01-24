@@ -1,0 +1,31 @@
+{
+  "os": "Linux-6.8.0-51-generic-x86_64-with-glibc2.39",
+  "python": "CPython 3.12.3",
+  "startedAt": "2025-01-24T20:18:47.447572Z",
+  "program": "/home/paulobeckhauser/mlops_finances/src/finance/main.py",
+  "codePath": "src/finance/main.py",
+  "git": {
+    "remote": "git@github.com:paulobeckhauser/mlops_finances.git",
+    "commit": "4897121040ad74fb35336c5cb8b4810db52b2c44"
+  },
+  "email": "pauloricardobeckhauser@gmail.com",
+  "root": ".",
+  "host": "paulobeckhauser-VirtualBox",
+  "executable": "/home/paulobeckhauser/mlops_finances/.venv/bin/python3",
+  "codePathLocal": "src/finance/main.py",
+  "cpu_count": 5,
+  "cpu_count_logical": 5,
+  "disk": {
+    "/": {
+      "total": "104556617728",
+      "used": "95022456832"
+    }
+  },
+  "memory": {
+    "total": "4980793344"
+  },
+  "cpu": {
+    "count": 5,
+    "countLogical": 5
+  }
+}
