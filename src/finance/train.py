@@ -5,6 +5,8 @@ from pathlib import Path
 import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.loggers import WandbLogger  # Import W&B Logger
+import wandb
 
 from finance.data import get_training_data
 from finance.model import DeepLearningModel, get_loaders
@@ -15,7 +17,7 @@ log = logging.getLogger(__name__)
 
 def train_model(
     model_name: str, preprocessed_file: Path, **kwargs: int | float
-) -> None:
+) -> tuple:
     """
     Train a machine learning model based on the specified model_name.
     Currently supports deep learning with PyTorch Lightning.
@@ -46,6 +48,13 @@ def train_model(
         model_dir = Path("model")
         model_dir.mkdir(parents=True, exist_ok=True)
 
+        # Set up W&B Logger
+        wandb_logger = WandbLogger(
+            project="deep_learning_project",
+            name="model_training",
+            log_model=True,
+        )
+
         # Set up checkpoint callback to save the best model
         checkpoint_callback = ModelCheckpoint(
             monitor="val_loss",
@@ -60,6 +69,7 @@ def train_model(
             max_epochs=int(kwargs.get("epochs", 10)),
             callbacks=[checkpoint_callback],
             log_every_n_steps=1,
+            logger=wandb_logger,
         )
 
         # Train the model
@@ -69,6 +79,12 @@ def train_model(
         save_path = model_dir / "model.pth"
         torch.save(model.state_dict(), save_path)  # Save the model's state_dict
         log.info(f"Final model saved at {save_path}")
+        
+        # Return the model and checkpoint path
+        return model, checkpoint_callback.best_model_path
+
+        # Finish W&B run
+        wandb.finish()
 
     else:
         raise ValueError(
