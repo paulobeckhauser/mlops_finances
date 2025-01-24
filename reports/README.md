@@ -293,7 +293,15 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 14 fill here ---
+![wandb](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/wandb.png)
+
+Training Loss (Top Plot):
+The train_loss plot shows the progression of training loss over the global steps. A decreasing trend in loss, albeit with fluctuations, suggests the model is learning from the training data. The noise in the curve is likely due to the optimizer or small batch sizes but remains in a reasonable range, indicating stability in training.
+
+Validation Loss (Bottom Plot):
+The val_loss plot represents how well the model generalizes to unseen data during training. The downward trend and eventual plateauing of the validation loss signify that the model is learning effectively without overfitting. This metric is particularly important in this project as we aim to predict unseen events in the economic calendar accurately.
+
+For a classification task like this, accuracy is our critical metric. It indicates how well the model identifies whether price parity is achieved based on the economic calendar. We prioritized maximizing validation accuracy during hyperparameter tuning. Loss is a proxy for model optimization. Lower training and validation losses signify that the model is minimizing its errors in predictions, essential for robust financial modeling.
 
 ### Question 15
 
