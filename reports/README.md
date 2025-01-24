@@ -120,9 +120,9 @@ The process would be: 1. Install python; 2. Clone the repository with 'git clone
 >
 > Answer:
 
-*From the cookiecutter template, we have filled out the data, dockerfiles, models, src, and test folders. The data folder was used to organize our raw and processed datasets, ensuring a structured workflow. The dockerfiles folder allowed us to set up a reproducible environment for our project using Docker, making collaboration and deployment seamless. The models folder stored our trained models and associated metadata. The src folder contained all the source code, including preprocessing scripts, model training, and evaluation pipelines. Finally, the test folder was used to ensure our code's functionality through unit and integration tests.
+From the cookiecutter template, we have filled out the data, dockerfiles, models, src, and test folders. The data folder was used to organize our raw and processed datasets, ensuring a structured workflow. The dockerfiles folder allowed us to set up a reproducible environment for our project using Docker, making collaboration and deployment seamless. The models folder stored our trained models and associated metadata. The src folder contained all the source code, including preprocessing scripts, model training, and evaluation pipelines. Finally, the test folder was used to ensure our code's functionality through unit and integration tests.
 
-We debated removing the notebooks folder since we rarely used Jupyter notebooks during the project, opting for .py files for prototyping and development to maintain a consistent coding style. Additionally, we added checkpoints and logs folders. The checkpoints folder stored intermediate training states, which allowed us to resume training efficiently, while the logs folder contained experiment details, including training metrics and configurations, making it easier to monitor and reproduce results. These additions were critical for managing and tracking our experiments systematically.*
+We debated removing the notebooks folder since we rarely used Jupyter notebooks during the project, opting for .py files for prototyping and development to maintain a consistent coding style. Additionally, we added checkpoints and logs folders. The checkpoints folder stored intermediate training states, which allowed us to resume training efficiently, while the logs folder contained experiment details, including training metrics and configurations, making it easier to monitor and reproduce results. These additions were critical for managing and tracking our experiments systematically.
 
 ### Question 6
 
@@ -293,7 +293,15 @@ This approach guarantees that all essential details, from hyperparameters to out
 >
 > Answer:
 
---- question 14 fill here ---
+![wandb](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/wandb.png)
+
+Training Loss (Top Plot):
+The train_loss plot shows the progression of training loss over the global steps. A decreasing trend in loss, albeit with fluctuations, suggests the model is learning from the training data. The noise in the curve is likely due to the optimizer or small batch sizes but remains in a reasonable range, indicating stability in training.
+
+Validation Loss (Bottom Plot):
+The val_loss plot represents how well the model generalizes to unseen data during training. The downward trend and eventual plateauing of the validation loss signify that the model is learning effectively without overfitting. This metric is particularly important in this project as we aim to predict unseen events in the economic calendar accurately.
+
+For a classification task like this, accuracy is our critical metric. It indicates how well the model identifies whether price parity is achieved based on the economic calendar. We prioritized maximizing validation accuracy during hyperparameter tuning. Loss is a proxy for model optimization. Lower training and validation losses signify that the model is minimizing its errors in predictions, essential for robust financial modeling.
 
 ### Question 15
 
@@ -380,10 +388,9 @@ This virtual machine, provided the flexibility to scale our operations and execu
 >
 > Answer:
 
+It follows the images below:
 ![GCP Bucket](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/GCP_buckets.png)
 ![Data Stored to GCP bucket](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/GCP_bucket_data.png)
-
-
 
 ### Question 20
 
@@ -391,6 +398,8 @@ This virtual machine, provided the flexibility to scale our operations and execu
 > **stored. You can take inspiration from [this figure](figures/registry.png).**
 >
 > Answer:
+
+It follows the images below:
 
 ![GCP Artifact Registry - Repositories](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Artifact%20Registry.png)
 ![Docker images that were uploaded](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/Docker_image_finance_project.png)
@@ -403,6 +412,8 @@ The docker image 'trainer' is the one related to our project, as is possible to 
 > **your project. You can take inspiration from [this figure](figures/build.png).**
 >
 > Answer:
+
+It follows the image below:
 
 ![GCP Cloud Build History](https://github.com/paulobeckhauser/mlops_finances/blob/main/reports/figures/GCP%20Cloud%20Build%20History.png)
 
@@ -485,8 +496,6 @@ The deployed API can be invoked through the /predict endpoint by sending a POST 
 > *before the service crashed.*
 >
 > Answer:
-
-
 
 ### Question 26
 
@@ -589,13 +598,13 @@ The project leverages Google Cloud Platform (GCP) for key services. A VM instanc
 >
 > Answer:
 
---- The biggest challenge in the project was understanding the infrastructure and effectively utilizing Google Cloud Platform (GCP). As we relied entirely on GCP, there was a steep learning curve in grasping its various tools, services, and configurations. Setting up the environment, managing permissions, and optimizing workflows required significant effort and time.
+The biggest challenge in the project was understanding the infrastructure and effectively utilizing Google Cloud Platform (GCP). As we relied entirely on GCP, there was a steep learning curve in grasping its various tools, services, and configurations. Setting up the environment, managing permissions, and optimizing workflows required significant effort and time.
 
 Another major struggle was working with Docker. While it offered a way to standardize our deployments, we faced performance issues as the containers often took too long to build and run. Debugging and optimizing the containerization process became an unexpected time sink, particularly when combined with API integration challenges. Using the correct ports for API access proved tricky, requiring several iterations and troubleshooting to ensure seamless communication between components.
 
 Building the model itself also posed significant difficulties, as we were working with time series data. Designing a model capable of accurately capturing the patterns and nuances of time-dependent data demanded careful consideration of feature engineering, hyperparameter tuning, and architecture selection. Despite our efforts, we believe the model is underperforming, likely due to challenges in balancing complexity and overfitting while working with a relatively volatile dataset.
 
-To address these challenges, we dedicated time to learning GCP's documentation and tutorials, sought community support for Docker optimizations, and conducted multiple tests to refine our API configurations. On the modeling side, we iteratively tested different approaches and are now focusing on further fine-tuning and exploring advanced methods to improve performance. Despite the hurdles, these experiences have provided valuable learning opportunities for future projects. ---
+To address these challenges, we dedicated time to learning GCP's documentation and tutorials, sought community support for Docker optimizations, and conducted multiple tests to refine our API configurations. On the modeling side, we iteratively tested different approaches and are now focusing on further fine-tuning and exploring advanced methods to improve performance. Despite the hurdles, these experiences have provided valuable learning opportunities for future projects.
 
 ### Question 31
 
